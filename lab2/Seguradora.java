@@ -26,7 +26,7 @@ public class Seguradora {
         return endereco;
     }
 
-    // Settters
+    // Setters
     public void setNome(String nome) {
         this.nome = nome;
     }

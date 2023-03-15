@@ -51,9 +51,37 @@ public class Cliente {
     // Métodos
     public Boolean verificarCpf(String cpf) {
         cpf = cpf.replaceAll("[^\\d]", "");
-        String digitos = cpf.substring(9);
+        int digitos = Integer.parseInt(cpf.substring(9));
 
-        // provisório
-        return true;
+        // primeiro digito
+        int primeiro = 0;
+        for (int i = 0; i < 9; i++) {
+            primeiro += (10 - i)*(cpf.charAt(i) - 48);
+        }
+        primeiro = 11 - (primeiro%11);
+        if (primeiro > 9) primeiro = 0;
+
+        // segundo
+        int segundo = 0;
+        for (int i = 0; i < 9; i++) {
+            segundo += (11 - i)*(cpf.charAt(i) - 48);
+        }
+        segundo += 2*primeiro;
+        segundo = 11 - (segundo%11);
+        if (segundo > 9) segundo = 0;
+
+        if (digitos == 10*primeiro + segundo) return true;
+        return false;
     }
+
+    public String toString() {
+        return "{" +
+            " nome='" + getNome() + "'" +
+            ", cpf='" + getCpf() + "'" +
+            ", dataNascimento='" + getDataNascimento() + "'" +
+            ", idade='" + getIdade() + "'" +
+            ", endereco='" + getEndereco() + "'" +
+            "}";
+    }
+
 }
