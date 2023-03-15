@@ -53,7 +53,15 @@ public class Cliente {
         cpf = cpf.replaceAll("[^\\d]", "");
         int digitos = Integer.parseInt(cpf.substring(9));
 
-        // primeiro digito
+        // Primeira analise
+        if (cpf.length() != 11) return false;
+        boolean iguais = true;
+        for (int i = 1; i < cpf.length(); i++) {
+            if (cpf.charAt(i) != cpf.charAt(0)) iguais = false;
+        }
+        if (iguais) return false;
+
+        // Digitos verificadores
         int primeiro = 0;
         for (int i = 0; i < 9; i++) {
             primeiro += (10 - i)*(cpf.charAt(i) - 48);
@@ -61,7 +69,6 @@ public class Cliente {
         primeiro = 11 - (primeiro%11);
         if (primeiro > 9) primeiro = 0;
 
-        // segundo
         int segundo = 0;
         for (int i = 0; i < 9; i++) {
             segundo += (11 - i)*(cpf.charAt(i) - 48);
@@ -70,8 +77,8 @@ public class Cliente {
         segundo = 11 - (segundo%11);
         if (segundo > 9) segundo = 0;
 
-        if (digitos == 10*primeiro + segundo) return true;
-        return false;
+        if (digitos != 10*primeiro + segundo) return false;
+        return true;
     }
 
     public String toString() {
