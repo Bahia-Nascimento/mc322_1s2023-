@@ -29,7 +29,7 @@ public class Cliente {
     }
 
     // Métodos
-    public void adicionaVeiculo(Veiculo veiculo) {
+    public void cadastrarVeiculo(Veiculo veiculo) {
         this.listaVeiculos.add(veiculo);
     }
 

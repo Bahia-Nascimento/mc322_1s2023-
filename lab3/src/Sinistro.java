@@ -1,14 +1,16 @@
+import java.time.LocalDate;
+
 public class Sinistro {
     private static int numSinistros = 0;
     private final int id;
-    private String data;
+    private LocalDate data;
     private String endereco;
     private Seguradora seguradora;
     private Veiculo veiculo;
     private Cliente cliente;
 
     // Construtor
-    public Sinistro(String data, String endereco, Seguradora seguradora, Veiculo veiculo, Cliente cliente) {
+    public Sinistro(LocalDate data, String endereco, Seguradora seguradora, Veiculo veiculo, Cliente cliente) {
         this.id = numSinistros;
         this.data = data;
         this.endereco = endereco;
@@ -22,7 +24,7 @@ public class Sinistro {
     public int getId() {
         return this.id;
     }
-    public String getData() {
+    public LocalDate getData() {
         return this.data;
     }
     public String getEndereco() {
@@ -39,7 +41,7 @@ public class Sinistro {
     }
   
     // Setters
-    public void setData(String data) {
+    public void setData(LocalDate data) {
         this.data = data;
     }
     public void setEndereco(String endereco) {

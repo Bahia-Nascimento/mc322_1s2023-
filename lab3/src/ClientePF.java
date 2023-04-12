@@ -1,15 +1,16 @@
-import java.sql.Date;
+import java.time.LocalDate;
 
 public class ClientePF extends Cliente {
     private String cpf;
-    private Date dataNascimento;
+    private LocalDate dataNascimento;
     private int idade;
     private String educacao;
     private String genero;
     private String classeEconomica;
+    private LocalDate dataLicenca;
 
 
-    public ClientePF(String nome, String endereco, String cpf, Date dataNascimento, int idade, String educacao, String genero, String classeEconomica) {
+    public ClientePF(String nome, String endereco, String cpf, LocalDate dataNascimento, int idade, String educacao, String genero, String classeEconomica, LocalDate dataLicenca) {
         super(nome, endereco);
         this.cpf = cpf;
         this.dataNascimento = dataNascimento;
@@ -17,6 +18,7 @@ public class ClientePF extends Cliente {
         this.educacao = educacao;
         this.genero = genero;
         this.classeEconomica = classeEconomica;
+        this.dataLicenca = dataLicenca;
     }
         
 
@@ -28,11 +30,11 @@ public class ClientePF extends Cliente {
         this.cpf = cpf;
     }
 
-    public Date getDataNascimento() {
+    public LocalDate getDataNascimento() {
         return this.dataNascimento;
     }
 
-    public void setDataNascimento(Date dataNascimento) {
+    public void setDataNascimento(LocalDate dataNascimento) {
         this.dataNascimento = dataNascimento;
     }
 
@@ -68,7 +70,15 @@ public class ClientePF extends Cliente {
         this.classeEconomica = classeEconomica;
     }
 
-    public Boolean verificarCpf(String cpf) {
+    public LocalDate getDataLicenca() {
+        return this.dataLicenca;
+    }
+
+    public void setDataLicenca(LocalDate dataLicenca) {
+        this.dataLicenca = dataLicenca;
+    }
+
+    public Boolean verificarCPF(String cpf) {
         cpf = cpf.replaceAll("[^\\d]", "");
         int digitos = Integer.parseInt(cpf.substring(9));
 
@@ -112,6 +122,7 @@ public class ClientePF extends Cliente {
             ", educacao='" + getEducacao() + "'" +
             ", genero='" + getGenero() + "'" +
             ", classeEconomica='" + getClasseEconomica() + "'" +
+            ", dataLicenca='" + getDataLicenca() + "'" +
             "}";
     }
 
