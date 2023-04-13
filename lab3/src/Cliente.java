@@ -19,6 +19,9 @@ public class Cliente {
     public String getEndereco() {
         return endereco;
     }
+    public ArrayList<Veiculo> getListaVeiculos() {
+        return listaVeiculos;
+    }
 
     // Setters
     public void setNome(String nome) {
