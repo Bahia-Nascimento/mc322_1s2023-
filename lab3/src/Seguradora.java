@@ -67,30 +67,28 @@ public class Seguradora {
         return false;
     }
 
-    public ArrayList<Cliente> listarClientes(String tipo) {
-        ArrayList<Cliente> lista = new ArrayList<Cliente>();
+    public void listarClientes(String tipo) {
         if (tipo.equals("PF")) {
             for (int i  = 0; i < this.listaClientes.size(); i++) {
                 if (this.listaClientes.get(i) instanceof ClientePF) {
-                    lista.add(this.listaClientes.get(i));
+                    System.out.println(this.listaClientes.get(i).toString());
                 }
             }
         }
         else if (tipo.equals("PJ")) {
             for (int i  = 0; i < this.listaClientes.size(); i++) {
                 if (this.listaClientes.get(i) instanceof ClientePJ) {
-                    lista.add(this.listaClientes.get(i));
+                    System.out.println(this.listaClientes.get(i).toString());
                 }
             }
         }
-
-        return lista;
     }
 
     public Boolean gerarSinistro(Veiculo veiculo, Cliente cliente, String endereco) {
         if (cliente.getListaVeiculos().contains(veiculo)) {
             Sinistro novo = new Sinistro(java.time.LocalDate.now(), endereco, this, veiculo, cliente);
             this.listaSinistros.add(novo);
+            System.out.println(novo.toString());
             return true;
         }
         return false;
@@ -105,7 +103,22 @@ public class Seguradora {
         return true;
     }
 
-    public ArrayList<Sinistro> listarSinistros() {
-        return this.listaSinistros;
+    public void listarSinistros() {
+        int len = this.listaSinistros.size();
+        if (len == 0){
+            System.out.println("Nao ha sinistros cadastrados na seguradora");
+        }
+        for (int i = 0; i < len; i++) {
+            System.out.println(listaSinistros.get(i).toString());
+        }
+    }
+
+    public int findCliente(String nome) {
+        for (int i = 0; i < this.listaClientes.size(); i++) {
+            if (this.listaClientes.get(i).getNome().equals(nome)) {
+                return i;
+            }
+        }
+        return -1;
     }
 }

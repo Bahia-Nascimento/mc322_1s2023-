@@ -36,6 +36,12 @@ public class Cliente {
         this.listaVeiculos.add(veiculo);
     }
 
+    public int findVeiculo(String placa) {
+        for (int i = 0; i < this.listaVeiculos.size(); i++) {
+            if (this.listaVeiculos.get(i).getPlaca().equals(placa)) return i;
+        }
+        return -1;
+    }
 
     public String toString() {
         return "{" +

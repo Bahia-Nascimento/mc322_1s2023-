@@ -31,16 +31,13 @@ public class ClientePJ extends Cliente {
     @Override
     public String toString() {
         return "{" +
-            " nome='" + getNome() + "'" +
-            ", endereco='" + getEndereco() + "'" +
-            " dataFundacao='" + getDataFundacao() + "'" +
-            ", cnpj='" + getCnpj() + "'" +
+            " nome: " + getNome() +
+            ", cnpj: " + getCnpj() +
             "}";
     }
 
-    public Boolean verificarCNPJ(String cnpj) {
+    public static Boolean verificarCNPJ(String cnpj) {
         cnpj = cnpj.replaceAll("[^\\d]", "");
-        int digitos = Integer.parseInt(cnpj.substring(12));
 
         // Primeira analise
         if (cnpj.length() != 14) return false;
@@ -51,6 +48,7 @@ public class ClientePJ extends Cliente {
         if (iguais) return false;
 
         // Digitos verificadores
+        int digitos = Integer.parseInt(cnpj.substring(12));
         int primeiro = 0;
         int k = 5;
         for (int i = 0; i < 12; i++) {

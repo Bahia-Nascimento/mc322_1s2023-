@@ -59,12 +59,12 @@ public class Sinistro {
 
     public String toString() {
         return "{" +
-            " id='" + getId() + "'" +
-            ", data='" + getData() + "'" +
-            ", endereco='" + getEndereco() + "'" +
-            ", seguradora='" + getSeguradora() + "'" +
-            ", veiculo='" + getVeiculo() + "'" +
-            ", cliente='" + getCliente() + "'" +
+            " id: " + getId() +
+            ", data: " + getData() +
+            ", endereco: " + getEndereco() +
+            ", seguradora: " + getSeguradora().getNome() +
+            ", veiculo: " + getVeiculo().getPlaca() +
+            ", cliente: " + getCliente().getNome() +
             "}";
     }
 

@@ -78,9 +78,8 @@ public class ClientePF extends Cliente {
         this.dataLicenca = dataLicenca;
     }
 
-    public Boolean verificarCPF(String cpf) {
+    public static Boolean verificarCPF(String cpf) {
         cpf = cpf.replaceAll("[^\\d]", "");
-        int digitos = Integer.parseInt(cpf.substring(9));
 
         // Primeira analise
         if (cpf.length() != 11) return false;
@@ -91,6 +90,7 @@ public class ClientePF extends Cliente {
         if (iguais) return false;
 
         // Digitos verificadores
+        int digitos = Integer.parseInt(cpf.substring(9));
         int primeiro = 0;
         for (int i = 0; i < 9; i++) {
             primeiro += (10 - i)*(cpf.charAt(i) - 48);
@@ -114,15 +114,8 @@ public class ClientePF extends Cliente {
     @Override
     public String toString() {
         return "{" +
-            " nome='" + getNome() + "'" +
-            ", endereco='" + getEndereco() + "'" +
-            ", cpf='" + getCpf() + "'" +
-            ", dataNascimento='" + getDataNascimento() + "'" +
-            ", idade='" + getIdade() + "'" +
-            ", educacao='" + getEducacao() + "'" +
-            ", genero='" + getGenero() + "'" +
-            ", classeEconomica='" + getClasseEconomica() + "'" +
-            ", dataLicenca='" + getDataLicenca() + "'" +
+            " nome: " + getNome() +
+            ", cpf: " + getCpf() +
             "}";
     }
 
