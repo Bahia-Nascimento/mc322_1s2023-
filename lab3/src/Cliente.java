@@ -22,7 +22,9 @@ public class Cliente {
     public ArrayList<Veiculo> getListaVeiculos() {
         return listaVeiculos;
     }
-
+    public String getCadastro() {
+        return null;
+    }
     // Setters
     public void setNome(String nome) {
         this.nome = nome;
@@ -36,11 +38,13 @@ public class Cliente {
         this.listaVeiculos.add(veiculo);
     }
 
-    public int findVeiculo(String placa) {
+    public Veiculo findVeiculo(String placa) {
         for (int i = 0; i < this.listaVeiculos.size(); i++) {
-            if (this.listaVeiculos.get(i).getPlaca().equals(placa)) return i;
+            if (this.listaVeiculos.get(i).getPlaca().equals(placa)) {
+                return this.listaVeiculos.get(i);
+            }
         }
-        return -1;
+        return null;
     }
 
     public String toString() {

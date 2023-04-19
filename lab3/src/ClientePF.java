@@ -78,6 +78,11 @@ public class ClientePF extends Cliente {
         this.dataLicenca = dataLicenca;
     }
 
+    @Override
+    public String getCadastro() {
+        return this.cpf;
+    }
+
     public static Boolean verificarCPF(String cpf) {
         cpf = cpf.replaceAll("[^\\d]", "");
 

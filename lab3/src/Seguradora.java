@@ -57,9 +57,9 @@ public class Seguradora {
         return this.listaClientes.add(cliente);
     }
     
-    public Boolean removerCliente(String nome) {
+    public Boolean removerCliente(String cadastro) {
         for (int i  = 0; i < this.listaClientes.size(); i++) {
-            if (this.listaClientes.get(i).getNome().equals(nome)) {
+            if (this.listaClientes.get(i).getCadastro().equals(cadastro)) {
                 this.listaClientes.remove(i);
                 return true;
             }
@@ -113,12 +113,12 @@ public class Seguradora {
         }
     }
 
-    public int findCliente(String nome) {
+    public Cliente findCliente(String cadastro) {
         for (int i = 0; i < this.listaClientes.size(); i++) {
-            if (this.listaClientes.get(i).getNome().equals(nome)) {
-                return i;
+            if (this.listaClientes.get(i).getCadastro().equals(cadastro)) {
+                return this.listaClientes.get(i);
             }
         }
-        return -1;
+        return null;
     }
 }

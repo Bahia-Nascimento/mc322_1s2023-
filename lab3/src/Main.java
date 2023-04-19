@@ -20,7 +20,8 @@ public class Main {
                 System.out.println("Cadastre uma seguradora");
                 listaSeguradoras.add(Main.cadastrarSeguradora(s));
                 Seguradora teste = listaSeguradoras.get(0);
-                System.out.print("Seguradora " + teste.getNome() + "\nCadastrada no indice ");
+                Main.clearScreen();
+                System.out.print("Seguradora " + teste.getNome() + " cadastrada no indice ");
                 System.out.println(listaSeguradoras.size() - 1);
                 System.out.println("Cadastre o cliente PF");
                 Main.cadastrarCliente(s, teste);
@@ -55,7 +56,7 @@ public class Main {
                 Seguradora seguradora = Main.cadastrarSeguradora(s);
                 listaSeguradoras.add(seguradora);
                 Main.clearScreen();
-                System.out.print("Seguradora " + seguradora.getNome() + "\nCadastrada no indice ");
+                System.out.print("Seguradora " + seguradora.getNome() + " cadastrada no indice ");
                 System.out.println(listaSeguradoras.size() - 1);
                 break;
                 case 2:
@@ -170,10 +171,10 @@ public class Main {
         }
     }
     public static void cadastrarVeiculo(Scanner s, Seguradora seguradora) {
-        System.out.print("Digite nome do cliente: ");
-        String nome = s.nextLine();
-        int i = seguradora.findCliente(nome);
-        if (i == -1) {
+        System.out.print("Digite CPF ou CNPJ do cliente: ");
+        String cadastro = s.nextLine();
+        Cliente cliente = seguradora.findCliente(cadastro);
+        if (cliente == null) {
             Main.clearScreen();
             System.out.println("Cliente nao encontrado");
             return;
@@ -187,42 +188,40 @@ public class Main {
         System.out.print("Ano de fabricacao: ");
         int anoFabricacao = Integer.parseInt(s.nextLine());
         Veiculo novo = new Veiculo(placa, marca, modelo, anoFabricacao);
-        seguradora.getListaClientes().get(i).cadastrarVeiculo(novo);
+        cliente.cadastrarVeiculo(novo);
         Main.clearScreen();
-        System.out.println(novo.toString() + "\nCadastrado para " + seguradora.getListaClientes().get(i).getNome());
+        System.out.println(novo.toString() + "\nCadastrado para " + cliente.getNome());
     }
     public static void removerCliente(Scanner s, Seguradora seguradora) {
-        System.out.print("Insira nome do cliente: ");
-        String nome = s.nextLine();
-        if (!seguradora.removerCliente(nome)) {
+        System.out.print("Insira CPF ou CNPJ do cliente: ");
+        String cadastro = s.nextLine();
+        if (!seguradora.removerCliente(cadastro)) {
             Main.clearScreen();
-            System.out.println(nome + " nao encontrado");
+            System.out.println(cadastro + " nao encontrado");
             return;
         }
         Main.clearScreen();
-        System.out.println(nome + " removido");
+        System.out.println(cadastro + " removido");
     }
     public static void gerarSinistro(Scanner s, Seguradora seguradora) {
-        System.out.print("Nome do cliente: ");
-        String nome = s.nextLine();
+        System.out.print("CPF ou CNPJ do cliente: ");
+        String cadastro = s.nextLine();
         System.out.print("Placa do veiculo: ");
         String placa = s.nextLine();
         System.out.print("Endereco do evento: ");
         String endereco = s.nextLine();
-        int i = seguradora.findCliente(nome);
-        if (i == -1) {
+        Cliente cliente = seguradora.findCliente(cadastro);
+        if (cliente == null) {
             Main.clearScreen();
             System.out.println("Cliente nao encontrado");
             return;
         }
-        Cliente cliente = seguradora.getListaClientes().get(i);
-        i = cliente.findVeiculo(placa);
-        if (i == -1) {
+        Veiculo veiculo = cliente.findVeiculo(placa);
+        if (veiculo == null) {
             Main.clearScreen();
             System.out.println("Veiculo nao encontrado");
             return;
         }
-        Veiculo veiculo = cliente.getListaVeiculos().get(i);
         Main.clearScreen();
         seguradora.gerarSinistro(veiculo, cliente, endereco);
     }

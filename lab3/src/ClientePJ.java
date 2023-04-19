@@ -27,6 +27,11 @@ public class ClientePJ extends Cliente {
         this.cnpj = cnpj;
     }
 
+    @Override
+    public String getCadastro() {
+        return this.cnpj;
+    }
+
 
     @Override
     public String toString() {
@@ -56,7 +61,7 @@ public class ClientePJ extends Cliente {
             if (i == 3) k = 13;
         }
         primeiro = 11 - (primeiro%11);
-        if (primeiro < 2) primeiro = 0;
+        if (primeiro >= 10) primeiro = 0;
 
         int segundo = 0;
         k = 6;
@@ -66,7 +71,7 @@ public class ClientePJ extends Cliente {
         }
         segundo += 2*primeiro;
         segundo = 11 - (segundo%11);
-        if (segundo < 2) segundo = 0;
+        if (segundo >= 10) segundo = 0;
 
         if (digitos != 10*primeiro + segundo) return false;
         return true;
