@@ -83,39 +83,6 @@ public class ClientePF extends Cliente {
         return this.cpf;
     }
 
-    public static Boolean verificarCPF(String cpf) {
-        cpf = cpf.replaceAll("[^\\d]", "");
-
-        // Primeira analise
-        if (cpf.length() != 11) return false;
-        boolean iguais = true;
-        for (int i = 1; i < cpf.length(); i++) {
-            if (cpf.charAt(i) != cpf.charAt(0)) iguais = false;
-        }
-        if (iguais) return false;
-
-        // Digitos verificadores
-        int digitos = Integer.parseInt(cpf.substring(9));
-        int primeiro = 0;
-        for (int i = 0; i < 9; i++) {
-            primeiro += (10 - i)*(cpf.charAt(i) - 48);
-        }
-        primeiro = 11 - (primeiro%11);
-        if (primeiro > 9) primeiro = 0;
-
-        int segundo = 0;
-        for (int i = 0; i < 9; i++) {
-            segundo += (11 - i)*(cpf.charAt(i) - 48);
-        }
-        segundo += 2*primeiro;
-        segundo = 11 - (segundo%11);
-        if (segundo > 9) segundo = 0;
-
-        if (digitos != 10*primeiro + segundo) return false;
-        return true;
-    }
-
-
     @Override
     public String toString() {
         return "{" +

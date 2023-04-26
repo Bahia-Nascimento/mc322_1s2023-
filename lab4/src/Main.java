@@ -4,103 +4,42 @@ import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
-        int a;
+        int entrada;
         boolean flag = true;
         ArrayList<Seguradora> listaSeguradoras = new ArrayList<Seguradora>();
         Scanner s = new Scanner(System.in);
-        System.out.println("Bem vindo!\nSe desejar, digite 0 no menu para obter uma rotina de testes");
+        System.out.println("Bem vindo!");
         while (flag) {
-            System.out.println("1. Cadastrar seguradora\n2. Cadastrar cliente\n3. Remover cliente\n4. Listar clientes\n" 
-            + "5. Cadastrar veiculo\n6. Gerar sinistro\n7. Visualizar sinistros de um cliente\n8. Listar sinistros");
-            a = Integer.parseInt(s.nextLine());
+            System.out.println("1. Cadastros\n2. Listar\n3. Excluir\n4. Gerar Sinistro\n"
+            + "5. Transferir Seguro\n6. Calcular Receita Seguradora\n0. Sair");
+            entrada = Integer.parseInt(s.nextLine());
             Main.clearScreen();
             int seg;
-            switch (a) {
-                case 0:
-                System.out.println("Cadastre uma seguradora");
-                listaSeguradoras.add(Main.cadastrarSeguradora(s));
-                Seguradora teste = listaSeguradoras.get(0);
-                Main.clearScreen();
-                System.out.print("Seguradora " + teste.getNome() + " cadastrada no indice ");
-                System.out.println(listaSeguradoras.size() - 1);
-                System.out.println("Cadastre o cliente PF");
-                Main.cadastrarCliente(s, teste);
-                System.out.println("Cadastre o cliente PJ");
-                Main.cadastrarCliente(s, teste);
-                System.out.println("Cadastre o veiculo do cliente PF");
-                Main.cadastrarVeiculo(s, teste);
-                System.out.println("Cadastre o veiculo do cliente PJ");
-                Main.cadastrarVeiculo(s, teste);
-                System.out.println("Remova algum cliente");
-                Main.removerCliente(s, teste);
-                System.out.println("Cadastre outro cliente qualquer");
-                Main.cadastrarCliente(s, teste);
-                System.out.println("Cadastre o veiculo do cliente novo");
-                Main.cadastrarVeiculo(s, teste);
-                System.out.println("Listando clientes PF:");
-                teste.listarClientes("PF");
-                System.out.println("Gere um sinistro em algum cliente");
-                Main.gerarSinistro(s, teste);
-                System.out.println("Gere outro sinistro em algum cliente");
-                Main.gerarSinistro(s, teste);
-                System.out.println("Listando os sinistros da seguradora:");
-                teste.listarSinistros();
-                System.out.println("Visualize os sinistros de algum cliente");
-                System.out.print("Nome: ");
-                String clienteTeste = s.nextLine();
-                Main.clearScreen();
-                teste.visualizarSinistro(clienteTeste);           
-                flag = false;
-                break;
+            switch (entrada) {
                 case 1:
-                Seguradora seguradora = Main.cadastrarSeguradora(s);
-                listaSeguradoras.add(seguradora);
-                Main.clearScreen();
-                System.out.print("Seguradora " + seguradora.getNome() + " cadastrada no indice ");
-                System.out.println(listaSeguradoras.size() - 1);
-                break;
+                    Main.cadastrar(s, listaSeguradoras);
+                    break;
                 case 2:
-                System.out.println("Indice da seguradora: ");
-                seg = Integer.parseInt(s.nextLine());
-                Main.cadastrarCliente(s, listaSeguradoras.get(seg));
-                break;
+                    Main.listar(s, listaSeguradoras);
+                    break;
                 case 3:
-                System.out.println("Indice da seguradora: ");
-                seg = Integer.parseInt(s.nextLine());
-                Main.removerCliente(s, listaSeguradoras.get(seg));
-                break;
+                    Main.excluir(s, listaSeguradoras);
+                    break;
                 case 4:
-                System.out.println("Indice da seguradora: ");
-                seg = Integer.parseInt(s.nextLine());
-                System.out.print("PF ou PJ? ");
-                String tipo = s.nextLine();
-                Main.clearScreen();
-                listaSeguradoras.get(seg).listarClientes(tipo);
-                break;
+                    System.out.println("Indice da seguradora: ");
+                    seg = Integer.parseInt(s.nextLine());
+                    Main.gerarSinistro(s, listaSeguradoras.get(seg));
+                    break;
                 case 5:
-                System.out.println("Indice da seguradora: ");
-                seg = Integer.parseInt(s.nextLine());
-                Main.cadastrarVeiculo(s, listaSeguradoras.get(seg));
-                break;
+
+                    break;
                 case 6:
-                System.out.println("Indice da seguradora: ");
-                seg = Integer.parseInt(s.nextLine());
-                Main.gerarSinistro(s, listaSeguradoras.get(seg));
-                break;
-                case 7:
-                System.out.println("Indice da seguradora: ");
-                seg = Integer.parseInt(s.nextLine());
-                System.out.print("Nome: ");
-                String nome = s.nextLine();
-                Main.clearScreen();
-                listaSeguradoras.get(seg).visualizarSinistro(nome);
-                break;
-                case 8:
-                System.out.println("Indice da seguradora: ");
-                seg = Integer.parseInt(s.nextLine());
-                Main.clearScreen();
-                listaSeguradoras.get(seg).listarSinistros();
-                break;
+
+                    break;
+
+                case 0:
+                    flag = false;
+                    break;
             }
         }
         s.close();
@@ -108,6 +47,95 @@ public class Main {
     public static void clearScreen() {
         System.out.print("\033[H\033[2J");  
         System.out.flush();
+    }
+    public static void cadastrar(Scanner s, ArrayList<Seguradora> listaSeguradoras) {
+        System.out.println("1. Cadastar Cliente\n2. Cadastrar Veiculo\n3. Cadastrar Seguradora\n4. Voltar");
+        int entrada = Integer.parseInt(s.nextLine());
+        Main.clearScreen();
+        int seg;
+        switch (entrada) {
+            case 1:
+                System.out.println("Indice da seguradora: ");
+                seg = Integer.parseInt(s.nextLine());
+                Main.clearScreen();
+                Main.cadastrarCliente(s, listaSeguradoras.get(seg));
+                break;
+            case 2:
+                System.out.println("Indice da seguradora: ");
+                seg = Integer.parseInt(s.nextLine());
+                Main.clearScreen();
+                Main.cadastrarVeiculo(s, listaSeguradoras.get(seg));
+                break;
+            case 3:
+                Seguradora seguradora = Main.cadastrarSeguradora(s);
+                listaSeguradoras.add(seguradora);
+                Main.clearScreen();
+                System.out.print("Seguradora " + seguradora.getNome() + " cadastrada no indice ");
+                System.out.println(listaSeguradoras.size() - 1);
+                break;
+            case 4:
+                return;
+        }
+    }
+    public static void listar(Scanner s, ArrayList<Seguradora> listaSeguradoras) {
+        System.out.println("1. Listar Clientes por Seg.\n2. Listar Sinistros por Seg.\n3. Listar Sinistros por Cliente\n"
+        + "4. Listar Veiculos por Cliente\n5. Listar Veiculos por Seg.\n6. Voltar");
+        int entrada = Integer.parseInt(s.nextLine());
+        Main.clearScreen();
+        int seg;
+        switch(entrada) {
+            case 1:
+                System.out.println("Indice da seguradora: ");
+                seg = Integer.parseInt(s.nextLine());
+                System.out.print("PF ou PJ? ");
+                String tipo = s.nextLine();
+                Main.clearScreen();
+                listaSeguradoras.get(seg).listarClientes(tipo);
+                break;
+            case 2:
+                System.out.println("Indice da seguradora: ");
+                seg = Integer.parseInt(s.nextLine());
+                Main.clearScreen();
+                listaSeguradoras.get(seg).listarSinistros();
+                break;
+            case 3:
+                System.out.println("Indice da seguradora: ");
+                seg = Integer.parseInt(s.nextLine());
+                System.out.print("Nome: ");
+                String nome = s.nextLine();
+                Main.clearScreen();
+                listaSeguradoras.get(seg).visualizarSinistro(nome);
+                break;
+            case 4:
+
+                break;
+            case 5:
+            
+                break;
+            case 6:
+                return;
+        }
+    }
+    public static void excluir(Scanner s, ArrayList<Seguradora> listaSeguradoras) {
+        System.out.println("1. Excluir Cliente\n2. Excluir Veiculo\n3. Excluir Sinistro\n4. Voltar");
+        int entrada = Integer.parseInt(s.nextLine());
+        Main.clearScreen();
+        int seg;
+        switch (entrada) {
+            case 1:
+                System.out.println("Indice da seguradora: ");
+                seg = Integer.parseInt(s.nextLine());
+                Main.removerCliente(s, listaSeguradoras.get(seg));
+                break;
+            case 2:
+                
+                break;
+            case 3:
+                
+                break;
+            case 4:
+                return;
+        }
     }
     public static Seguradora cadastrarSeguradora(Scanner s) {
         System.out.print("Nome: ");
@@ -125,6 +153,11 @@ public class Main {
         int a = Integer.parseInt(s.nextLine());
         System.out.print("Nome: ");
         String nome = s.nextLine();
+        if (!Validacao.validaNome(nome)) {
+            Main.clearScreen();
+            System.out.println("Nome invalido");
+            return;
+        }
         System.out.print("Endereco: ");
         String endereco = s.nextLine();
         switch (a) {
@@ -133,7 +166,7 @@ public class Main {
             int idade = Integer.parseInt(s.nextLine());
             System.out.print("CPF: ");
             String cpf = s.nextLine();
-            if (!ClientePF.verificarCPF(cpf)) {
+            if (!Validacao.validaCPF(cpf)) {
                 Main.clearScreen();
                 System.out.println("CPF invalido");
                 return;
@@ -156,14 +189,16 @@ public class Main {
             case 2:
             System.out.print("CNPJ: ");
             String cnpj = s.nextLine();
-            if (!ClientePJ.verificarCNPJ(cnpj)) {
+            if (!Validacao.validaCNPJ(cnpj)) {
                 Main.clearScreen();
                 System.out.println("CNPJ invalido");
                 return;
             }
             System.out.print("Data da fundacao (YYYY-MM-DD): ");
             LocalDate dataFundacao = LocalDate.parse(s.nextLine());
-            ClientePJ novoPj = new ClientePJ(nome, endereco, dataFundacao, cnpj);
+            System.out.print("Quantidade de funcionarios: ");
+            int qtdeFuncionarios = Integer.parseInt(s.nextLine());
+            ClientePJ novoPj = new ClientePJ(nome, endereco, dataFundacao, cnpj, qtdeFuncionarios);
             seguradora.cadastrarCliente(novoPj);
             Main.clearScreen();
             System.out.println(novoPj.toString() + "\nCliente cadastrado");

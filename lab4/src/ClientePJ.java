@@ -3,11 +3,13 @@ import java.time.LocalDate;
 public class ClientePJ extends Cliente {
     private LocalDate dataFundacao;
     private String cnpj;
+    private int qtdeFuncionarios;
 
-    public ClientePJ(String nome, String endereco, LocalDate dataFundacao, String cnpj) {
+    public ClientePJ(String nome, String endereco, LocalDate dataFundacao, String cnpj, int qtdeFuncionarios) {
         super(nome, endereco);
         this.cnpj = cnpj;
         this.dataFundacao = dataFundacao;
+        this.qtdeFuncionarios = qtdeFuncionarios;
     }
 
 
@@ -27,6 +29,16 @@ public class ClientePJ extends Cliente {
         this.cnpj = cnpj;
     }
 
+
+    public int getQtdeFuncionarios() {
+        return this.qtdeFuncionarios;
+    }
+
+    public void setQtdeFuncionarios(int qtdeFuncionarios) {
+        this.qtdeFuncionarios = qtdeFuncionarios;
+    }
+
+
     @Override
     public String getCadastro() {
         return this.cnpj;
@@ -39,42 +51,6 @@ public class ClientePJ extends Cliente {
             " nome: " + getNome() +
             ", cnpj: " + getCnpj() +
             "}";
-    }
-
-    public static Boolean verificarCNPJ(String cnpj) {
-        cnpj = cnpj.replaceAll("[^\\d]", "");
-
-        // Primeira analise
-        if (cnpj.length() != 14) return false;
-        boolean iguais = true;
-        for (int i = 1; i < cnpj.length(); i++) {
-            if (cnpj.charAt(i) != cnpj.charAt(0)) iguais = false;
-        }
-        if (iguais) return false;
-
-        // Digitos verificadores
-        int digitos = Integer.parseInt(cnpj.substring(12));
-        int primeiro = 0;
-        int k = 5;
-        for (int i = 0; i < 12; i++) {
-            primeiro += (k - i)*(cnpj.charAt(i) - 48);
-            if (i == 3) k = 13;
-        }
-        primeiro = 11 - (primeiro%11);
-        if (primeiro >= 10) primeiro = 0;
-
-        int segundo = 0;
-        k = 6;
-        for (int i = 0; i < 12; i++) {
-            segundo += (k - i)*(cnpj.charAt(i) - 48);
-            if (i == 4) k = 14;
-        }
-        segundo += 2*primeiro;
-        segundo = 11 - (segundo%11);
-        if (segundo >= 10) segundo = 0;
-
-        if (digitos != 10*primeiro + segundo) return false;
-        return true;
     }
     
 }

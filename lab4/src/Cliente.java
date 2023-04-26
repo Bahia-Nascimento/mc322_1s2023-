@@ -1,15 +1,17 @@
 import java.util.ArrayList;
 
-public class Cliente {
+public abstract class Cliente {
     private String nome;
     private String endereco;
     private ArrayList<Veiculo> listaVeiculos;
+    private int qtdeSinistros;
 
     // Construtor
     public Cliente(String nome, String endereco) {
         this.nome = nome;
         this.endereco = endereco;
         this.listaVeiculos = new ArrayList<Veiculo>();
+        this.qtdeSinistros = 0;
     }
 
     // Getters
@@ -25,12 +27,18 @@ public class Cliente {
     public String getCadastro() {
         return null;
     }
+    public int getQtdeSinistros() {
+        return qtdeSinistros;
+    }
     // Setters
     public void setNome(String nome) {
         this.nome = nome;
     }
     public void setEndereco(String endereco) {
         this.endereco = endereco;
+    }
+    public void setQtdeSinistros(int qtdeSinistros) {
+        this.qtdeSinistros = qtdeSinistros;
     }
 
     // Métodos

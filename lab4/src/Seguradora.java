@@ -88,6 +88,7 @@ public class Seguradora {
         if (cliente.getListaVeiculos().contains(veiculo)) {
             Sinistro novo = new Sinistro(java.time.LocalDate.now(), endereco, this, veiculo, cliente);
             this.listaSinistros.add(novo);
+            cliente.setQtdeSinistros(cliente.getQtdeSinistros() + 1);
             System.out.println(novo.toString());
             return true;
         }
