@@ -1,24 +1,24 @@
 import java.time.LocalDate;
+import java.time.Period;
 
 public class ClientePF extends Cliente {
     private String cpf;
     private LocalDate dataNascimento;
-    private int idade;
     private String educacao;
     private String genero;
     private String classeEconomica;
     private LocalDate dataLicenca;
 
 
-    public ClientePF(String nome, String endereco, String cpf, LocalDate dataNascimento, int idade, String educacao, String genero, String classeEconomica, LocalDate dataLicenca) {
+    public ClientePF(String nome, String endereco, String cpf, LocalDate dataNascimento, String educacao, String genero, String classeEconomica, LocalDate dataLicenca) {
         super(nome, endereco);
         this.cpf = cpf;
         this.dataNascimento = dataNascimento;
-        this.idade = idade;
         this.educacao = educacao;
         this.genero = genero;
         this.classeEconomica = classeEconomica;
         this.dataLicenca = dataLicenca;
+        this.setValorSeguro(Seguradora.calculaPrecoSeguroCliente(this));
     }
         
 
@@ -36,14 +36,6 @@ public class ClientePF extends Cliente {
 
     public void setDataNascimento(LocalDate dataNascimento) {
         this.dataNascimento = dataNascimento;
-    }
-
-    public int getIdade() {
-        return this.idade;
-    }
-
-    public void setIdade(int idade) {
-        this.idade = idade;
     }
 
     public String getEducacao() {
@@ -84,11 +76,41 @@ public class ClientePF extends Cliente {
     }
 
     @Override
+    public void cadastrarVeiculo(Veiculo veiculo) {
+        this.getListaVeiculos().add(veiculo);
+        this.setValorSeguro(Seguradora.calculaPrecoSeguroCliente(this));
+    }
+
+    @Override
+    public Boolean removerVeiculo(String placa) {
+        Veiculo remover = findVeiculo(placa);
+        if (remover == null) {
+            return false;
+        }
+        this.getListaVeiculos().remove(remover);
+        this.setValorSeguro(Seguradora.calculaPrecoSeguroCliente(this));
+        return true;
+    }
+
+    @Override
     public String toString() {
         return "{" +
             " nome: " + getNome() +
             ", cpf: " + getCpf() +
             "}";
+    }
+
+    @Override
+    public double calculaScore() {
+        int idade = (Period.between(this.dataNascimento, LocalDate.now())).getYears();
+        if (idade < 30 && idade >= 18) {
+            return CalcSeguro.VALOR_BASE.getFator() * CalcSeguro.FATOR_18_30.getFator() * this.getListaVeiculos().size();
+        } else if (idade < 60 && idade >= 30) {
+            return CalcSeguro.VALOR_BASE.getFator() * CalcSeguro.FATOR_30_60.getFator() * this.getListaVeiculos().size();
+        } else if (idade < 90 && idade >= 60) {
+            return CalcSeguro.VALOR_BASE.getFator() * CalcSeguro.FATOR_60_90.getFator() * this.getListaVeiculos().size();
+        }
+        else return 0;
     }
 
 }

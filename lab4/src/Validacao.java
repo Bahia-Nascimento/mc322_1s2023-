@@ -68,13 +68,10 @@ public class Validacao {
     }
 
     public static Boolean validaNome(String nome) {
-        if (!nome.equals("")) {
+        if (nome.equals("")) {
             return false;
         }
-        String numeros = nome.replaceAll("[^\\d]", "");
-        if (!numeros.equals("")) {
-            return false;
-        }
-        return true;
+        nome = nome.replaceAll(" ", "");
+        return nome.matches("[a-zA-Z]+");
     }
 }

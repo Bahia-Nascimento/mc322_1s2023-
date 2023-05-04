@@ -95,9 +95,10 @@ public class Seguradora {
         return false;
     }
 
-    public Boolean visualizarSinistro(String cliente) {
+    public Boolean visualizarSinistros(Cliente cliente) {
+        // Lista todos os sinistros de um cliente
         for (int i = 0; i < this.listaSinistros.size(); i++) {
-            if (this.listaSinistros.get(i).getCliente().getNome().equals(cliente)) {
+            if (this.listaSinistros.get(i).getCliente().equals(cliente)) {
                 System.out.println(this.listaSinistros.get(i).toString());
             }
         }
@@ -114,6 +115,26 @@ public class Seguradora {
         }
     }
 
+    public Boolean removerSinistro(int id) {
+        for (int i = 0; i < listaSinistros.size(); i++) {
+            if (listaSinistros.get(i).getId() == id) {
+                Cliente cliente = listaSinistros.get(i).getCliente();
+                cliente.setQtdeSinistros(cliente.getQtdeSinistros() - 1);
+                if (cliente instanceof ClientePF) {
+                    cliente.setValorSeguro(Seguradora.calculaPrecoSeguroCliente((ClientePF)cliente));
+                    listaSinistros.remove(i);
+                    return true;
+                }
+                if (cliente instanceof ClientePJ) {
+                    cliente.setValorSeguro(Seguradora.calculaPrecoSeguroCliente((ClientePJ)cliente));
+                    listaSinistros.remove(i);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public Cliente findCliente(String cadastro) {
         for (int i = 0; i < this.listaClientes.size(); i++) {
             if (this.listaClientes.get(i).getCadastro().equals(cadastro)) {
@@ -121,5 +142,44 @@ public class Seguradora {
             }
         }
         return null;
+    }
+
+    public void transferir(Cliente c1, Cliente c2) {
+        // Transfere todos os veiculos e sinistros de c1 para c2
+        ArrayList<Veiculo> veiculos = c1.getListaVeiculos();
+        for (int i = 0; i < veiculos.size(); i++) {
+            c2.cadastrarVeiculo(veiculos.get(i));
+        }
+        c1.limparVeiculos();
+        ArrayList<Sinistro> sinistros = this.getListaSinistros();
+        for (int i = 0; i < sinistros.size(); i++) {
+            if (sinistros.get(i).getCliente().equals(c1)) {
+                sinistros.get(i).setCliente(c2);
+            }
+        }
+        c2.setQtdeSinistros(c2.getQtdeSinistros() + c1.getQtdeSinistros());
+        c1.setQtdeSinistros(0);
+        if (c1 instanceof ClientePF) {
+            c1.setValorSeguro(Seguradora.calculaPrecoSeguroCliente((ClientePF)c1));
+        }
+        if (c1 instanceof ClientePJ) {
+            c1.setValorSeguro(Seguradora.calculaPrecoSeguroCliente((ClientePJ)c1));
+        }
+
+    }
+
+    public static double calculaPrecoSeguroCliente(ClientePF cliente) {
+        return cliente.calculaScore() * (1 + cliente.getQtdeSinistros());
+    }
+    public static double calculaPrecoSeguroCliente(ClientePJ cliente) {
+        return cliente.calculaScore() * (1 + cliente.getQtdeSinistros());
+    }
+
+    public double calcularReceita() {
+        double receita = 0;
+        for (int i = 0; i < listaClientes.size(); i++) {
+            receita += listaClientes.get(i).getValorSeguro();
+        }
+        return receita;
     }
 }

@@ -44,6 +44,22 @@ public class ClientePJ extends Cliente {
         return this.cnpj;
     }
 
+    @Override
+    public void cadastrarVeiculo(Veiculo veiculo) {
+        this.getListaVeiculos().add(veiculo);
+        this.setValorSeguro(Seguradora.calculaPrecoSeguroCliente(this));
+    }
+
+    @Override
+    public Boolean removerVeiculo(String placa) {
+        Veiculo remover = findVeiculo(placa);
+        if (remover == null) {
+            return false;
+        }
+        this.getListaVeiculos().remove(remover);
+        this.setValorSeguro(Seguradora.calculaPrecoSeguroCliente(this));
+        return true;
+    }
 
     @Override
     public String toString() {
@@ -51,6 +67,11 @@ public class ClientePJ extends Cliente {
             " nome: " + getNome() +
             ", cnpj: " + getCnpj() +
             "}";
+    }
+
+    @Override
+    public double calculaScore() {
+        return CalcSeguro.VALOR_BASE.getFator() * (1 + qtdeFuncionarios/100) * getListaVeiculos().size();
     }
     
 }
