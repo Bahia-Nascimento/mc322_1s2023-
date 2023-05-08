@@ -77,12 +77,14 @@ public class ClientePF extends Cliente {
 
     @Override
     public void cadastrarVeiculo(Veiculo veiculo) {
+        // Adiciona veiculo e atualiza o valor do seguro conforme convencao PF
         this.getListaVeiculos().add(veiculo);
         this.setValorSeguro(Seguradora.calculaPrecoSeguroCliente(this));
     }
 
     @Override
     public Boolean removerVeiculo(String placa) {
+        // Remove veiculo e atualiza o valor do seguro conforme convencao PF, retorna se foi encontrado ou nao tal veiculo
         Veiculo remover = findVeiculo(placa);
         if (remover == null) {
             return false;

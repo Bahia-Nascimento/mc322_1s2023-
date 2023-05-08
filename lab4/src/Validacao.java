@@ -1,5 +1,6 @@
 public class Validacao {
     public static Boolean validaCPF(String cpf) {
+        // Valida o CPF com base nos digitos verificadores. Invalida CPFs com quantidade errada de digitos ou todos os digitos iguais
         cpf = cpf.replaceAll("[^\\d]", "");
 
         // Primeira analise
@@ -32,6 +33,7 @@ public class Validacao {
     }
 
     public static Boolean validaCNPJ(String cnpj) {
+        // Valida o CNPJ com base nos digitos verificadores. Invalida CNPJs com quantidade errada de digitos ou todos os digitos iguais
         cnpj = cnpj.replaceAll("[^\\d]", "");
 
         // Primeira analise
@@ -68,6 +70,7 @@ public class Validacao {
     }
 
     public static Boolean validaNome(String nome) {
+        // Retorna verdadeiro se um nome nao é vazio ou tem algum caractere fora do alfabeto. Nao invalida nomes com espaco
         if (nome.equals("")) {
             return false;
         }

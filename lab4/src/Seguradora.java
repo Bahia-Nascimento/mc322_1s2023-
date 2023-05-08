@@ -68,6 +68,7 @@ public class Seguradora {
     }
 
     public void listarClientes(String tipo) {
+        // Imprime na tela todos os clientes tipo PF ou PJ da seguradora
         if (tipo.equals("PF")) {
             for (int i  = 0; i < this.listaClientes.size(); i++) {
                 if (this.listaClientes.get(i) instanceof ClientePF) {
@@ -96,7 +97,7 @@ public class Seguradora {
     }
 
     public Boolean visualizarSinistros(Cliente cliente) {
-        // Lista todos os sinistros de um cliente
+        // Imprime na tela todos os sinistros de um cliente
         for (int i = 0; i < this.listaSinistros.size(); i++) {
             if (this.listaSinistros.get(i).getCliente().equals(cliente)) {
                 System.out.println(this.listaSinistros.get(i).toString());
@@ -106,6 +107,7 @@ public class Seguradora {
     }
 
     public void listarSinistros() {
+        // IMprime na tela todos os sinistros cadastrados na seguradora
         int len = this.listaSinistros.size();
         if (len == 0){
             System.out.println("Nao ha sinistros cadastrados na seguradora");
@@ -116,6 +118,7 @@ public class Seguradora {
     }
 
     public Boolean removerSinistro(int id) {
+        // REmove sinistro e atualiza o valor do seguro do cliente
         for (int i = 0; i < listaSinistros.size(); i++) {
             if (listaSinistros.get(i).getId() == id) {
                 Cliente cliente = listaSinistros.get(i).getCliente();
@@ -145,7 +148,7 @@ public class Seguradora {
     }
 
     public void transferir(Cliente c1, Cliente c2) {
-        // Transfere todos os veiculos e sinistros de c1 para c2
+        // Transfere todos os veiculos e sinistros associados de c1 para c2
         ArrayList<Veiculo> veiculos = c1.getListaVeiculos();
         for (int i = 0; i < veiculos.size(); i++) {
             c2.cadastrarVeiculo(veiculos.get(i));
@@ -176,6 +179,7 @@ public class Seguradora {
     }
 
     public double calcularReceita() {
+        // Retorna a somatoria do valor do seguro de todos os clientes cadastrados na seguradora
         double receita = 0;
         for (int i = 0; i < listaClientes.size(); i++) {
             receita += listaClientes.get(i).getValorSeguro();
