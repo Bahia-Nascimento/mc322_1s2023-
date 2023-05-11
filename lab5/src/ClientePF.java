@@ -10,7 +10,8 @@ public class ClientePF extends Cliente {
     private LocalDate dataLicenca;
 
 
-    public ClientePF(String nome, String endereco, String cpf, LocalDate dataNascimento, String educacao, String genero, String classeEconomica, LocalDate dataLicenca) {
+    public ClientePF(String nome, String endereco, String cpf, LocalDate dataNascimento,
+     String educacao, String genero, String classeEconomica, LocalDate dataLicenca) {
         super(nome, endereco);
         this.cpf = cpf;
         this.dataNascimento = dataNascimento;
@@ -105,12 +106,12 @@ public class ClientePF extends Cliente {
     @Override
     public double calculaScore() {
         int idade = (Period.between(this.dataNascimento, LocalDate.now())).getYears();
-        if (idade < 30 && idade >= 18) {
-            return CalcSeguro.VALOR_BASE.getFator() * CalcSeguro.FATOR_18_30.getFator() * this.getListaVeiculos().size();
-        } else if (idade < 60 && idade >= 30) {
+        if (idade < 30) {
+            return CalcSeguro.VALOR_BASE.getFator() * CalcSeguro.FATOR_MENOR_30.getFator() * this.getListaVeiculos().size();
+        } else if (idade <= 60 && idade >= 30) {
             return CalcSeguro.VALOR_BASE.getFator() * CalcSeguro.FATOR_30_60.getFator() * this.getListaVeiculos().size();
-        } else if (idade < 90 && idade >= 60) {
-            return CalcSeguro.VALOR_BASE.getFator() * CalcSeguro.FATOR_60_90.getFator() * this.getListaVeiculos().size();
+        } else if (idade > 60) {
+            return CalcSeguro.VALOR_BASE.getFator() * CalcSeguro.FATOR_MAIOR_60.getFator() * this.getListaVeiculos().size();
         }
         else return 0;
     }

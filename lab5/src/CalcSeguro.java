@@ -1,8 +1,8 @@
 public enum CalcSeguro {
-    VALOR_BASE(100.0),
-    FATOR_18_30(1.2),
+    VALOR_BASE(10.0),
+    FATOR_MENOR_30(1.25),
     FATOR_30_60(1.0),
-    FATOR_60_90(1.5);
+    FATOR_MAIOR_60(1.5);
     private final double fator;
 
     private CalcSeguro(double fator) {
