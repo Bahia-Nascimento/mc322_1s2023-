@@ -5,8 +5,8 @@ public class ClientePJ extends Cliente {
     private String cnpj;
     private int qtdeFuncionarios;
 
-    public ClientePJ(String nome, String endereco, LocalDate dataFundacao, String cnpj, int qtdeFuncionarios) {
-        super(nome, endereco);
+    public ClientePJ(String nome, String endereco, String telefone, String email, LocalDate dataFundacao, String cnpj, int qtdeFuncionarios) {
+        super(nome, endereco, telefone, email);
         this.cnpj = cnpj;
         this.dataFundacao = dataFundacao;
         this.qtdeFuncionarios = qtdeFuncionarios;

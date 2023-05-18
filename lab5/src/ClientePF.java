@@ -1,27 +1,26 @@
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.ArrayList;
 
 public class ClientePF extends Cliente {
     private String cpf;
     private LocalDate dataNascimento;
     private String educacao;
     private String genero;
-    private String classeEconomica;
     private LocalDate dataLicenca;
+    private ArrayList<Veiculo> listaVeiculos;
 
 
-    public ClientePF(String nome, String endereco, String cpf, LocalDate dataNascimento,
-     String educacao, String genero, String classeEconomica, LocalDate dataLicenca) {
-        super(nome, endereco);
+    public ClientePF(String nome, String endereco, String telefone, String email, String cpf, LocalDate dataNascimento,
+     String educacao, String genero, LocalDate dataLicenca) {
+        super(nome, endereco, telefone, email);
         this.cpf = cpf;
         this.dataNascimento = dataNascimento;
         this.educacao = educacao;
         this.genero = genero;
-        this.classeEconomica = classeEconomica;
         this.dataLicenca = dataLicenca;
-        this.setValorSeguro(Seguradora.calculaPrecoSeguroCliente(this));
+        this.listaVeiculos = new ArrayList<Veiculo>();
     }
-        
 
     public String getCpf() {
         return this.cpf;
@@ -55,14 +54,6 @@ public class ClientePF extends Cliente {
         this.genero = genero;
     }
 
-    public String getClasseEconomica() {
-        return this.classeEconomica;
-    }
-
-    public void setClasseEconomica(String classeEconomica) {
-        this.classeEconomica = classeEconomica;
-    }
-
     public LocalDate getDataLicenca() {
         return this.dataLicenca;
     }
@@ -71,28 +62,37 @@ public class ClientePF extends Cliente {
         this.dataLicenca = dataLicenca;
     }
 
+    public ArrayList<Veiculo> getListaVeiculos() {
+        return listaVeiculos;
+    }
+
     @Override
     public String getCadastro() {
         return this.cpf;
     }
 
-    @Override
     public void cadastrarVeiculo(Veiculo veiculo) {
         // Adiciona veiculo e atualiza o valor do seguro conforme convencao PF
-        this.getListaVeiculos().add(veiculo);
-        this.setValorSeguro(Seguradora.calculaPrecoSeguroCliente(this));
+        this.listaVeiculos.add(veiculo);
     }
 
-    @Override
     public Boolean removerVeiculo(String placa) {
         // Remove veiculo e atualiza o valor do seguro conforme convencao PF, retorna se foi encontrado ou nao tal veiculo
         Veiculo remover = findVeiculo(placa);
         if (remover == null) {
             return false;
         }
-        this.getListaVeiculos().remove(remover);
-        this.setValorSeguro(Seguradora.calculaPrecoSeguroCliente(this));
+        listaVeiculos.remove(remover);
         return true;
+    }
+
+    public Veiculo findVeiculo(String placa) {
+        for (int i = 0; i < this.listaVeiculos.size(); i++) {
+            if (this.listaVeiculos.get(i).getPlaca().equals(placa)) {
+                return this.listaVeiculos.get(i);
+            }
+        }
+        return null;
     }
 
     @Override
@@ -107,11 +107,11 @@ public class ClientePF extends Cliente {
     public double calculaScore() {
         int idade = (Period.between(this.dataNascimento, LocalDate.now())).getYears();
         if (idade < 30) {
-            return CalcSeguro.VALOR_BASE.getFator() * CalcSeguro.FATOR_MENOR_30.getFator() * this.getListaVeiculos().size();
+            return CalcSeguro.VALOR_BASE.getFator() * CalcSeguro.FATOR_MENOR_30.getFator() * listaVeiculos.size();
         } else if (idade <= 60 && idade >= 30) {
-            return CalcSeguro.VALOR_BASE.getFator() * CalcSeguro.FATOR_30_60.getFator() * this.getListaVeiculos().size();
+            return CalcSeguro.VALOR_BASE.getFator() * CalcSeguro.FATOR_30_60.getFator() * listaVeiculos.size();
         } else if (idade > 60) {
-            return CalcSeguro.VALOR_BASE.getFator() * CalcSeguro.FATOR_MAIOR_60.getFator() * this.getListaVeiculos().size();
+            return CalcSeguro.VALOR_BASE.getFator() * CalcSeguro.FATOR_MAIOR_60.getFator() * listaVeiculos.size();
         }
         else return 0;
     }

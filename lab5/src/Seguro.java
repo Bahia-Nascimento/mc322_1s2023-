@@ -2,14 +2,14 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public abstract class Seguro {
-    private static int numSeguros = 0;
-    private final int id;
-    private LocalDate dataInicio;
-    private LocalDate dataFim;
-    private Seguradora seguradora;
-    private ArrayList<Sinistro> listaSinistros;
-    private ArrayList<Condutor> listaCondutores;
-    private int valorMensal;
+    protected static int numSeguros = 0;
+    protected final int id;
+    protected LocalDate dataInicio;
+    protected LocalDate dataFim;
+    protected Seguradora seguradora;
+    protected ArrayList<Sinistro> listaSinistros;
+    protected ArrayList<Condutor> listaCondutores;
+    protected int valorMensal;
 
     public Seguro(LocalDate dataInicio, LocalDate dataFim, Seguradora seguradora) {
         this.id = numSeguros;
@@ -100,4 +100,5 @@ public abstract class Seguro {
 
     public abstract double calcularValor();
 
+    public abstract Cliente getCliente();
 }

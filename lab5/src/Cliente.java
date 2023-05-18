@@ -1,17 +1,16 @@
-import java.util.ArrayList;
-
 public abstract class Cliente {
-    private String nome;
-    private String endereco;
-    private ArrayList<Veiculo> listaVeiculos;
-    private int qtdeSinistros;
-    private double valorSeguro;
+    protected String nome;
+    protected String endereco;
+    protected String telefone;
+    protected String email;
+    protected int qtdeSinistros;
 
     // Construtor
-    public Cliente(String nome, String endereco) {
+    public Cliente(String nome, String endereco, String telefone, String email) {
         this.nome = nome;
         this.endereco = endereco;
-        this.listaVeiculos = new ArrayList<Veiculo>();
+        this.telefone = telefone;
+        this.email = email;
         this.qtdeSinistros = 0;
     }
 
@@ -22,17 +21,17 @@ public abstract class Cliente {
     public String getEndereco() {
         return endereco;
     }
-    public ArrayList<Veiculo> getListaVeiculos() {
-        return listaVeiculos;
+    public String getTelefone() {
+        return telefone;
+    }
+    public String getEmail() {
+        return email;
     }
     public String getCadastro() {
         return null;
     }
     public int getQtdeSinistros() {
         return qtdeSinistros;
-    }
-    public double getValorSeguro() {
-        return valorSeguro;
     }
     // Setters
     public void setNome(String nome) {
@@ -41,39 +40,17 @@ public abstract class Cliente {
     public void setEndereco(String endereco) {
         this.endereco = endereco;
     }
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
     public void setQtdeSinistros(int qtdeSinistros) {
         this.qtdeSinistros = qtdeSinistros;
     }
-    public void setValorSeguro(double valor) {
-        this.valorSeguro = valor;
-    }
 
     // Métodos
-    public void cadastrarVeiculo(Veiculo veiculo) {
-        this.listaVeiculos.add(veiculo);
-    }
-
-    public Boolean removerVeiculo(String placa) {
-        Veiculo remover = findVeiculo(placa);
-        if (remover == null) {
-            return false;
-        }
-        this.listaVeiculos.remove(remover);
-        return true;
-    }
-
-    public void limparVeiculos() {
-        this.listaVeiculos = new ArrayList<Veiculo>();
-    }
-
-    public Veiculo findVeiculo(String placa) {
-        for (int i = 0; i < this.listaVeiculos.size(); i++) {
-            if (this.listaVeiculos.get(i).getPlaca().equals(placa)) {
-                return this.listaVeiculos.get(i);
-            }
-        }
-        return null;
-    }
 
     public String toString() {
         return "{" +
@@ -84,10 +61,5 @@ public abstract class Cliente {
     
     public abstract double calculaScore();
 
-    public void listarVeiculos() {
-        for (int i = 0; i < listaVeiculos.size(); i++) {
-            System.out.println(listaVeiculos.get(i).toString());
-        }
-    }
 
 }

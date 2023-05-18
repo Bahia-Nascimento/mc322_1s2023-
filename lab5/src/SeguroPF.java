@@ -38,6 +38,11 @@ public class SeguroPF extends Seguro {
         } else if (idade > 60) {
             valor *= CalcSeguro.FATOR_MAIOR_60.getFator();
         }
-        return valor * (1 + (1 / (cliente.getListaVeiculos().size() + 2))) * (2 + (cliente.getQtdeSinistros() / 10)) * (5 + con)
+        int sinistrosCondutores = 0;
+        for (int i = 0; i < listaCondutores.size(); i++) {
+            sinistrosCondutores += listaCondutores.get(i).getListaSinistros().size();
+        }
+        return valor * (1 + (1 / (cliente.getListaVeiculos().size() + 2))) 
+        * (2 + (cliente.getQtdeSinistros() / 10)) * (5 + (sinistrosCondutores/10));
     }
 }
