@@ -5,18 +5,18 @@ public class Sinistro {
     private final int id;
     private LocalDate data;
     private String endereco;
-    private Seguradora seguradora;
+    private Seguro seguro;
     private Veiculo veiculo;
-    private Cliente cliente;
+    private Condutor condutor;
 
     // Construtor
-    public Sinistro(LocalDate data, String endereco, Seguradora seguradora, Veiculo veiculo, Cliente cliente) {
+    public Sinistro(LocalDate data, String endereco, Seguro seguro, Veiculo veiculo, Condutor condutor) {
         this.id = numSinistros;
         this.data = data;
         this.endereco = endereco;
         this.veiculo = veiculo;
-        this.seguradora = seguradora;
-        this.cliente = cliente;
+        this.seguro = seguro;
+        this.condutor = condutor;
         Sinistro.numSinistros++;
     }
 
@@ -30,14 +30,14 @@ public class Sinistro {
     public String getEndereco() {
         return this.endereco;
     }
-    public Seguradora getSeguradora() {
-        return this.seguradora;
+    public Seguro getSeguro() {
+        return this.seguro;
     }
     public Veiculo getVeiculo() {
         return this.veiculo;
     }
-    public Cliente getCliente() {
-        return this.cliente;
+    public Condutor getCondutor() {
+        return this.condutor;
     }
   
     // Setters
@@ -47,14 +47,8 @@ public class Sinistro {
     public void setEndereco(String endereco) {
         this.endereco = endereco;
     }   
-    public void setSeguradora(Seguradora seguradora) {
-        this.seguradora = seguradora;
-    }
-    public void setVeiculo(Veiculo veiculo) {
-        this.veiculo = veiculo;
-    }
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
+    public void setCondutor(Condutor condutor) {
+        this.condutor = condutor;
     }
 
     public String toString() {
@@ -63,7 +57,7 @@ public class Sinistro {
             ", data: " + getData() +
             ", endereco: " + getEndereco() +
             ", veiculo: " + getVeiculo().getPlaca() +
-            ", cliente: " + getCliente().getNome() +
+            ", condutor: " + getCondutor().getNome() +
             "}";
     }
 

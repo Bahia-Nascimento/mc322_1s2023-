@@ -99,6 +99,6 @@ public abstract class Seguro {
     }
 
     public abstract double calcularValor();
-
+    public abstract void gerarSinistro(String endereco, String cpfCondutor, String placa);
     public abstract Cliente getCliente();
 }

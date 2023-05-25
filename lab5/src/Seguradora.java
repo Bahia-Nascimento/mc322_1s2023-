@@ -154,4 +154,16 @@ public class Seguradora {
         }
         return receita;
     }
+
+    public void listSeguros() {
+        for (Seguro seg : listaSeguros) {
+            System.out.println(seg.toString());
+        }
+    }
+
+    public void listClientes() {
+        for (Cliente cli : listaClientes) {
+            System.out.println(cli.toString());
+        }
+    }
 }

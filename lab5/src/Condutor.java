@@ -84,5 +84,8 @@ public class Condutor {
             "}";
     }
 
+    public void adicionarSinistro(Sinistro s) {
+        listaSinistros.add(s);
+    }
 
 }

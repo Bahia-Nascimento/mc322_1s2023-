@@ -54,12 +54,10 @@ public abstract class Cliente {
 
     public String toString() {
         return "{" +
-            " nome='" + getNome() + "'" +
-            ", endereco='" + getEndereco() + "'" +
+            " nome: " + getNome() +
+            ", endereco: " + getEndereco() +
             "}";
     }
-    
-    public abstract double calculaScore();
 
 
 }

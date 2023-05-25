@@ -4,9 +4,10 @@ public class Frota {
     private String code;
     private ArrayList<Veiculo> listaVeiculos;
 
-    public Frota(String code) {
+    public Frota(String code, Veiculo veiculo) {
         this.code = code;
         this.listaVeiculos = new ArrayList<Veiculo>();
+        this.listaVeiculos.add(veiculo);
     }
 
     public String getCode() {
@@ -23,12 +24,11 @@ public class Frota {
 
     public String toString() {
         return "{" +
-            " code='" + getCode() + "'" +
-            ", listaVeiculos='" + getListaVeiculos() + "'" +
+            " code: " + getCode() +
+            ", Numero de veiculos: " + getListaVeiculos().size() +
             "}";
     }
-   
-    
+       
     // Métodos
     public Boolean addVeiculo(Veiculo veiculo) {
         this.listaVeiculos.add(veiculo);
@@ -50,4 +50,5 @@ public class Frota {
         }
         return null;
     }
+
 }

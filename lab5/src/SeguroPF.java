@@ -5,6 +5,11 @@ public class SeguroPF extends Seguro {
     private Veiculo veiculo;
     private ClientePF cliente;
 
+    public SeguroPF(LocalDate dataInicio, LocalDate dataFim, Seguradora seguradora, Veiculo veiculo, ClientePF cliente) {
+        super(dataInicio, dataFim, seguradora);
+        this.veiculo = veiculo;
+        this.cliente = cliente;
+    }
 
     public Veiculo getVeiculo() {
         return this.veiculo;
@@ -19,12 +24,6 @@ public class SeguroPF extends Seguro {
     }
 
     public void setCliente(ClientePF cliente) {
-        this.cliente = cliente;
-    }
-
-    public SeguroPF(LocalDate dataInicio, LocalDate dataFim, Seguradora seguradora, Veiculo veiculo, ClientePF cliente) {
-        super(dataInicio, dataFim, seguradora);
-        this.veiculo = veiculo;
         this.cliente = cliente;
     }
 
@@ -44,5 +43,20 @@ public class SeguroPF extends Seguro {
         }
         return valor * (1 + (1 / (cliente.getListaVeiculos().size() + 2))) 
         * (2 + (cliente.getQtdeSinistros() / 10)) * (5 + (sinistrosCondutores/10));
+    }
+
+    public void gerarSinistro(String endereco, String cpfCondutor, String placa) {
+        Condutor condutor = findCondutor(cpfCondutor);
+        if (condutor == null) {
+            System.out.println("Por favor, cadastre o condutor antes no seguro antes de gerar o sinistro");
+            return;
+        }
+        if (!veiculo.getPlaca().equals(placa)) {
+            System.out.println("Placa inserida nao corresponde com o veiculo segurado");
+            return;
+        }
+        Sinistro novo = new Sinistro(LocalDate.now(), endereco, this, veiculo, condutor);
+        listaSinistros.add(novo);
+        return;
     }
 }

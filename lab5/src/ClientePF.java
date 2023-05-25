@@ -1,5 +1,4 @@
 import java.time.LocalDate;
-import java.time.Period;
 import java.util.ArrayList;
 
 public class ClientePF extends Cliente {
@@ -103,17 +102,9 @@ public class ClientePF extends Cliente {
             "}";
     }
 
-    @Override
-    public double calculaScore() {
-        int idade = (Period.between(this.dataNascimento, LocalDate.now())).getYears();
-        if (idade < 30) {
-            return CalcSeguro.VALOR_BASE.getFator() * CalcSeguro.FATOR_MENOR_30.getFator() * listaVeiculos.size();
-        } else if (idade <= 60 && idade >= 30) {
-            return CalcSeguro.VALOR_BASE.getFator() * CalcSeguro.FATOR_30_60.getFator() * listaVeiculos.size();
-        } else if (idade > 60) {
-            return CalcSeguro.VALOR_BASE.getFator() * CalcSeguro.FATOR_MAIOR_60.getFator() * listaVeiculos.size();
+    public void listVeiculos() {
+        for (Veiculo ve : listaVeiculos) {
+            System.out.println(ve.toString());
         }
-        else return 0;
-    }
-
+    }    
 }

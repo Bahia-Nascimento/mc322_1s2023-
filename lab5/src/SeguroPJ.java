@@ -4,7 +4,12 @@ import java.time.Period;
 public class SeguroPJ extends Seguro {
     private Frota frota;
     private ClientePJ cliente;
-
+    
+    public SeguroPJ(LocalDate dataInicio, LocalDate dataFim, Seguradora seguradora, Frota frota, ClientePJ cliente) {
+        super(dataInicio, dataFim, seguradora);
+        this.frota = frota;
+        this.cliente = cliente;
+    }
 
     public Frota getFrota() {
         return this.frota;
@@ -22,13 +27,6 @@ public class SeguroPJ extends Seguro {
         this.cliente = cliente;
     }
 
-
-    public SeguroPJ(LocalDate dataInicio, LocalDate dataFim, Seguradora seguradora, Frota frota, ClientePJ cliente) {
-        super(dataInicio, dataFim, seguradora);
-        this.frota = frota;
-        this.cliente = cliente;
-    }
-
     public double calcularValor() {
         double valor = CalcSeguro.VALOR_BASE.getFator();
         int sinistrosCondutores = 0;
@@ -41,4 +39,19 @@ public class SeguroPJ extends Seguro {
         * (2 + cliente.getQtdeSinistros()/10) * (5 + sinistrosCondutores/10);
     }
 
+    public void gerarSinistro(String endereco, String cpfCondutor, String placa) {
+        Condutor condutor = findCondutor(cpfCondutor);
+        if (condutor == null) {
+            System.out.println("Por favor, cadastre o condutor antes no seguro antes de gerar o sinistro");
+            return;
+        }
+        Veiculo veiculo = frota.findVeiculo(placa);
+        if (veiculo == null) {
+            System.out.println("Veiculo nao encontrado nesta frota");
+            return;
+        }
+        Sinistro novo = new Sinistro(LocalDate.now(), endereco, this, veiculo, condutor);
+        listaSinistros.add(novo);
+        return;
+    }
 }

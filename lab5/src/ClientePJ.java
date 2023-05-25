@@ -1,8 +1,10 @@
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class ClientePJ extends Cliente {
     private LocalDate dataFundacao;
     private String cnpj;
+    private ArrayList<Frota> listaFrota;
     private int qtdeFuncionarios;
 
     public ClientePJ(String nome, String endereco, String telefone, String email, LocalDate dataFundacao, String cnpj, int qtdeFuncionarios) {
@@ -10,6 +12,7 @@ public class ClientePJ extends Cliente {
         this.cnpj = cnpj;
         this.dataFundacao = dataFundacao;
         this.qtdeFuncionarios = qtdeFuncionarios;
+        this.listaFrota = new ArrayList<Frota>();
     }
 
 
@@ -29,7 +32,6 @@ public class ClientePJ extends Cliente {
         this.cnpj = cnpj;
     }
 
-
     public int getQtdeFuncionarios() {
         return this.qtdeFuncionarios;
     }
@@ -38,29 +40,13 @@ public class ClientePJ extends Cliente {
         this.qtdeFuncionarios = qtdeFuncionarios;
     }
 
+    public ArrayList<Frota> getListaFrota() {
+        return this.listaFrota;
+    }
 
     @Override
     public String getCadastro() {
         return this.cnpj;
-    }
-
-    @Override
-    public void cadastrarVeiculo(Veiculo veiculo) {
-        // Adiciona veiculo e atualiza o valor do seguro conforme convencao PJ
-        this.getListaVeiculos().add(veiculo);
-        this.setValorSeguro(Seguradora.calculaPrecoSeguroCliente(this));
-    }
-
-    @Override
-    public Boolean removerVeiculo(String placa) {
-            // Remove veiculo e atualiza o valor do seguro conforme convencao PJ, retorna se foi encontrado ou nao tal veiculo
-        Veiculo remover = findVeiculo(placa);
-        if (remover == null) {
-            return false;
-        }
-        this.getListaVeiculos().remove(remover);
-        this.setValorSeguro(Seguradora.calculaPrecoSeguroCliente(this));
-        return true;
     }
 
     @Override
@@ -70,10 +56,60 @@ public class ClientePJ extends Cliente {
             ", cnpj: " + getCnpj() +
             "}";
     }
-
-    @Override
-    public double calculaScore() {
-        return CalcSeguro.VALOR_BASE.getFator() * (1 + qtdeFuncionarios/100) * getListaVeiculos().size();
-    }
     
+    public void cadastrarFrota(String code, Veiculo veiculo) {
+    Frota nova = new Frota(code, veiculo);
+    this.listaFrota.add(nova);
+   }
+
+    public Frota findFrota(String code) {
+    for (Frota frota : listaFrota) {
+        if (frota.getCode().equals(code)) {
+            return frota;
+        }
+    }
+    return null;
+   }
+
+    public Boolean atualizarFrota(String code) {
+        Frota frota = findFrota(code);
+        if (frota == null) {
+        return false;
+        }
+        listaFrota.remove(frota);
+        return true;
+    }
+    public Boolean atualizarFrota(String code, Veiculo v) {
+        Frota frota = findFrota(code);
+        if (frota == null) {
+        return false;
+        }
+        frota.addVeiculo(v);
+        return true;
+    }
+    public Boolean atualizarFrota(String code, String placa) {
+        Frota frota = findFrota(code);
+        if (frota == null) {
+        return false;
+        }
+        frota.removeVeiculo(placa);
+        return true;
+    }
+
+    public Boolean getVeiculosPorFrota(String code) {
+        Frota frota = findFrota(code);
+        if (frota == null) {
+            return false;
+        }
+        for (Veiculo v : frota.getListaVeiculos()) {
+            System.out.println(v.toString());
+        }
+        return true;
+    }
+
+    public void listFrotas() {
+        for (Frota frota : listaFrota) {
+            System.out.println(frota.toString());
+        }
+    }
 }
