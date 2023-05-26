@@ -4,7 +4,7 @@ public enum MenuOperacoes {
     LISTAR(2),
     EXCLUIR(3),
     GERAR_SINISTRO(4),
-    TRANSFERIR_SEGURO(5),
+    GERAR_SEGURO(5),
     CALCULAR_RECEITA_SEGURADORA(6);
 
 

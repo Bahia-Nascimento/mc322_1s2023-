@@ -57,8 +57,8 @@ public class ClientePJ extends Cliente {
             "}";
     }
     
-    public void cadastrarFrota(String code, Veiculo veiculo) {
-    Frota nova = new Frota(code, veiculo);
+    public void cadastrarFrota(String code) {
+    Frota nova = new Frota(code);
     this.listaFrota.add(nova);
    }
 
@@ -110,6 +110,15 @@ public class ClientePJ extends Cliente {
     public void listFrotas() {
         for (Frota frota : listaFrota) {
             System.out.println(frota.toString());
+        }
+    }
+
+    public void listVeiculos() {
+        for (Frota f : listaFrota) {
+            System.out.println("Frota " + f.getCode());
+            for (Veiculo v : f.getListaVeiculos()) {
+                System.out.println(v.toString());
+            }
         }
     }
 }

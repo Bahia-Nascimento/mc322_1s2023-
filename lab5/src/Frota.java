@@ -1,13 +1,13 @@
 import java.util.ArrayList;
 
 public class Frota {
+    // Frotas vazias sao permitidas, eh obrigacao do usuario remover frotas vazias caso queira reduzir seus custos
     private String code;
     private ArrayList<Veiculo> listaVeiculos;
 
-    public Frota(String code, Veiculo veiculo) {
+    public Frota(String code) {
         this.code = code;
         this.listaVeiculos = new ArrayList<Veiculo>();
-        this.listaVeiculos.add(veiculo);
     }
 
     public String getCode() {

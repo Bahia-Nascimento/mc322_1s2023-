@@ -9,6 +9,7 @@ public class Seguradora {
     private String endereco;
     private ArrayList<Cliente> listaClientes;
     private ArrayList<Seguro> listaSeguros;
+    private ArrayList<Condutor> listaCondutores;
     
     // Construtor
     public Seguradora(String cnpj, String nome, String telefone, String email, String endereco) {
@@ -19,6 +20,7 @@ public class Seguradora {
         this.endereco = endereco;
         this.listaClientes = new ArrayList<Cliente>();
         this.listaSeguros = new ArrayList<Seguro>();
+        this.listaCondutores = new ArrayList<Condutor>();
     }
 
     // Getters
@@ -43,7 +45,9 @@ public class Seguradora {
     public ArrayList<Seguro> getListaSeguross() {
         return this.listaSeguros;
     }
-    
+    public ArrayList<Condutor> getListaCondutores() {
+        return this.listaCondutores;
+    }
     // Setters
     public void setNome(String nome) {
         this.nome = nome;
@@ -91,10 +95,33 @@ public class Seguradora {
         }
     }
 
+    public Boolean cadastrarCondutor(Condutor condutor) {
+        return this.listaCondutores.add(condutor);
+    }
+    
+    public Boolean removerCondutor(String cpf) {
+        for (Condutor c : listaCondutores) {
+            if (c.getCpf().equals(cpf)) {
+                this.listaCondutores.remove(c);
+                return true;
+            }
+        }
+        return false;
+    }
+
     public Boolean gerarSeguro(ClientePF cliente, Veiculo veiculo) {
-        SeguroPF novo = new SeguroPF(LocalDate.now(), LocalDate.now().plusYears(3), this, veiculo, cliente);
+        // Gera um novo seguro PJ, seguros PJ expiram em 2 anos
+        SeguroPF novo = new SeguroPF(LocalDate.now(), LocalDate.now().plusYears(2), this, veiculo, cliente);
         novo.autorizarCondutor(new Condutor(cliente.getCpf(), cliente.getNome(), cliente.getTelefone(), 
         cliente.getEndereco(), cliente.getEmail(), cliente.getDataNascimento()));
+        listaSeguros.add(novo);
+        return true;
+    }
+
+    public Boolean gerarSeguro(ClientePJ cliente, Frota frota) {
+        // Gera um novo seguro PJ, seguros PJ expiram em 1 ano
+        SeguroPJ novo = new SeguroPJ(LocalDate.now(), LocalDate.now().plusYears(1), this, frota, cliente);
+        listaSeguros.add(novo);
         return true;
     }
 
@@ -138,9 +165,29 @@ public class Seguradora {
 }
 
     public Cliente findCliente(String cadastro) {
+        // Retorna o cliente associado ao cadastro (cpf ou cnpj) passado
         for (int i = 0; i < this.listaClientes.size(); i++) {
             if (this.listaClientes.get(i).getCadastro().equals(cadastro)) {
                 return this.listaClientes.get(i);
+            }
+        }
+        return null;
+    }
+
+    public Seguro findSeguro(int id) {
+        // Retorna o seguro associado ao id passado
+        for (Seguro se : listaSeguros) {
+            if (se.getId() == id) {
+                return se;
+            }
+        }
+        return null;
+    }
+
+    public Condutor findCondutor(String cpf) {
+        for (Condutor c : listaCondutores) {
+            if (c.getCpf().equals(cpf)) {
+                return c;
             }
         }
         return null;
@@ -156,12 +203,14 @@ public class Seguradora {
     }
 
     public void listSeguros() {
+        // Imprime todos os seguros cadastrados na seguradora
         for (Seguro seg : listaSeguros) {
             System.out.println(seg.toString());
         }
     }
 
     public void listClientes() {
+        // Imprime todos os clientes cadastrados na seguradora
         for (Cliente cli : listaClientes) {
             System.out.println(cli.toString());
         }

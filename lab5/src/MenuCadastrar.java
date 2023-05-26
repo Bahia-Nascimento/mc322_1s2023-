@@ -2,7 +2,9 @@ public enum MenuCadastrar {
     CLIENTE(1),
     VEICULO(2),
     SEGURADORA(3),
-    VOLTAR(4);
+    CONDUTOR(4),
+    FROTA(5),
+    VOLTAR(6);
 
     public final int operacao;
 

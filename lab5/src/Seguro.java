@@ -9,7 +9,7 @@ public abstract class Seguro {
     protected Seguradora seguradora;
     protected ArrayList<Sinistro> listaSinistros;
     protected ArrayList<Condutor> listaCondutores;
-    protected int valorMensal;
+    protected double valorMensal;
 
     public Seguro(LocalDate dataInicio, LocalDate dataFim, Seguradora seguradora) {
         this.id = numSeguros;
@@ -56,21 +56,20 @@ public abstract class Seguro {
         return this.listaCondutores;
     }
 
-    public int getValorMensal() {
+    public double getValorMensal() {
         return this.valorMensal;
     }
 
-    public void setValorMensal(int valorMensal) {
+    public void setValorMensal(double valorMensal) {
         this.valorMensal = valorMensal;
     }
 
     public String toString() {
         return "{" +
-            " id: " + getId() +
-            ", dataInicio: " + getDataInicio() +
-            ", dataFim: " + getDataFim() +
-            ", seguradora: " + getSeguradora() +
-            ", valorMensal: " + getValorMensal() +
+            " Id: " + getId() +
+            ", Data de inicio: " + getDataInicio() +
+            ", Data de expiracao: " + getDataFim() +
+            ", Valor mensal: " + getValorMensal() +
             "}";
     }
     
@@ -98,7 +97,7 @@ public abstract class Seguro {
         return null;
     }
 
+    public abstract void gerarSinistro(String endereco, String cpfCondutor);
     public abstract double calcularValor();
-    public abstract void gerarSinistro(String endereco, String cpfCondutor, String placa);
     public abstract Cliente getCliente();
 }

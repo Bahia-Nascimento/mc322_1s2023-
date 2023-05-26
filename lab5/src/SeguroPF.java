@@ -9,6 +9,7 @@ public class SeguroPF extends Seguro {
         super(dataInicio, dataFim, seguradora);
         this.veiculo = veiculo;
         this.cliente = cliente;
+        this.valorMensal = calcularValor();
     }
 
     public Veiculo getVeiculo() {
@@ -41,22 +42,34 @@ public class SeguroPF extends Seguro {
         for (int i = 0; i < listaCondutores.size(); i++) {
             sinistrosCondutores += listaCondutores.get(i).getListaSinistros().size();
         }
-        return valor * (1 + (1 / (cliente.getListaVeiculos().size() + 2))) 
+        valor = valor * (1 + (1 / (cliente.getListaVeiculos().size() + 2))) 
         * (2 + (cliente.getQtdeSinistros() / 10)) * (5 + (sinistrosCondutores/10));
+        valorMensal = valor;
+        return valorMensal;
     }
 
-    public void gerarSinistro(String endereco, String cpfCondutor, String placa) {
+    public void gerarSinistro(String endereco, String cpfCondutor) {
+        // Se o condutor passado for valido, gera um novo sinistro e cadastra em ambos seguro e condutor
         Condutor condutor = findCondutor(cpfCondutor);
         if (condutor == null) {
             System.out.println("Por favor, cadastre o condutor antes no seguro antes de gerar o sinistro");
             return;
         }
-        if (!veiculo.getPlaca().equals(placa)) {
-            System.out.println("Placa inserida nao corresponde com o veiculo segurado");
-            return;
-        }
-        Sinistro novo = new Sinistro(LocalDate.now(), endereco, this, veiculo, condutor);
+        Sinistro novo = new Sinistro(LocalDate.now(), endereco, this, condutor);
         listaSinistros.add(novo);
+        condutor.adicionarSinistro(novo);
+        cliente.setQtdeSinistros(cliente.getQtdeSinistros() + 1);
         return;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+            " Id: " + getId() +
+            ", Data de inicio: " + getDataInicio() +
+            ", Data de expiracao: " + getDataFim() +
+            ", Veiculo: " + veiculo.getPlaca() +
+            ", Valor mensal: " + getValorMensal() +
+            "}";
     }
 }

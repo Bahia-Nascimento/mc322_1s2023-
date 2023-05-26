@@ -6,15 +6,13 @@ public class Sinistro {
     private LocalDate data;
     private String endereco;
     private Seguro seguro;
-    private Veiculo veiculo;
     private Condutor condutor;
 
     // Construtor
-    public Sinistro(LocalDate data, String endereco, Seguro seguro, Veiculo veiculo, Condutor condutor) {
+    public Sinistro(LocalDate data, String endereco, Seguro seguro, Condutor condutor) {
         this.id = numSinistros;
         this.data = data;
         this.endereco = endereco;
-        this.veiculo = veiculo;
         this.seguro = seguro;
         this.condutor = condutor;
         Sinistro.numSinistros++;
@@ -32,9 +30,6 @@ public class Sinistro {
     }
     public Seguro getSeguro() {
         return this.seguro;
-    }
-    public Veiculo getVeiculo() {
-        return this.veiculo;
     }
     public Condutor getCondutor() {
         return this.condutor;
@@ -56,7 +51,7 @@ public class Sinistro {
             " id: " + getId() +
             ", data: " + getData() +
             ", endereco: " + getEndereco() +
-            ", veiculo: " + getVeiculo().getPlaca() +
+            ", id do seguro: " + seguro.getId() +
             ", condutor: " + getCondutor().getNome() +
             "}";
     }
