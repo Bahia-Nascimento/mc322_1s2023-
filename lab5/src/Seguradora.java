@@ -42,7 +42,7 @@ public class Seguradora {
     public ArrayList<Cliente> getListaClientes() {
         return this.listaClientes;
     }
-    public ArrayList<Seguro> getListaSeguross() {
+    public ArrayList<Seguro> getListaSeguros() {
         return this.listaSeguros;
     }
     public ArrayList<Condutor> getListaCondutores() {
@@ -68,9 +68,16 @@ public class Seguradora {
     }
     
     public Boolean removerCliente(String cadastro) {
-        for (int i  = 0; i < this.listaClientes.size(); i++) {
-            if (this.listaClientes.get(i).getCadastro().equals(cadastro)) {
-                this.listaClientes.remove(i);
+        /* Remove todos os seguros de um cliente, e depois o proprio cliente
+            frotas e veiculos serao removidos pelo garbage collector, enquanto que sinistros seram mantidos no sistema*/
+        for (Cliente cliente : listaClientes) {
+            if (cliente.getCadastro().equals(cadastro)) {
+                for (Seguro seg : listaSeguros) {
+                    if (seg.getCliente().equals(cliente)) {
+                        cancelarSeguro(seg.getId());
+                    }
+                }
+                listaClientes.remove(cliente);
                 return true;
             }
         }
@@ -110,11 +117,10 @@ public class Seguradora {
     }
 
     public Boolean gerarSeguro(ClientePF cliente, Veiculo veiculo) {
-        // Gera um novo seguro PJ, seguros PJ expiram em 2 anos
+        // Gera um novo seguro PF, seguros PF expiram em 2 anos
         SeguroPF novo = new SeguroPF(LocalDate.now(), LocalDate.now().plusYears(2), this, veiculo, cliente);
-        novo.autorizarCondutor(new Condutor(cliente.getCpf(), cliente.getNome(), cliente.getTelefone(), 
-        cliente.getEndereco(), cliente.getEmail(), cliente.getDataNascimento()));
         listaSeguros.add(novo);
+        System.out.println("Seguro cadastrado\n" + novo.toString());
         return true;
     }
 
@@ -122,12 +128,15 @@ public class Seguradora {
         // Gera um novo seguro PJ, seguros PJ expiram em 1 ano
         SeguroPJ novo = new SeguroPJ(LocalDate.now(), LocalDate.now().plusYears(1), this, frota, cliente);
         listaSeguros.add(novo);
+        System.out.println("Seguro cadastrado\n" + novo.toString());
         return true;
     }
 
     public Boolean cancelarSeguro(int id) {
+        // Atualiza a data de fim e cancela o seguro, sinistros nao sao apagados
         for (Seguro seg : listaSeguros) {
             if (seg.id == id) {
+                seg.setDataFim(LocalDate.now());
                 listaSeguros.remove(seg);
                 return true;
             }
@@ -140,13 +149,13 @@ public class Seguradora {
         ArrayList<Seguro> lista = new ArrayList<Seguro>();
         if (cliente instanceof ClientePF) {
             for (Seguro seg : listaSeguros) {
-                if (((SeguroPF)seg).getCliente().equals(cliente)) {
+                if (seg.getCliente().equals(cliente)) {
                     lista.add(seg);
                 }
             }
         } else if (cliente instanceof ClientePJ) {
             for (Seguro seg : listaSeguros) {
-                if (((SeguroPJ)seg).getCliente().equals(cliente)) {
+                if (seg.getCliente().equals(cliente)) {
                     lista.add(seg);
                 }
             }
@@ -215,4 +224,15 @@ public class Seguradora {
             System.out.println(cli.toString());
         }
     }
+
+    public String toString() {
+        return "{" +
+            " cnpj: " + getCnpj() +
+            ", nome: " + getNome() +
+            ", telefone: " + getTelefone() +
+            ", email: " + getEmail() +
+            ", endereco: " + getEndereco() +
+            "}";
+    }
+
 }

@@ -13,6 +13,7 @@ public abstract class Seguro {
 
     public Seguro(LocalDate dataInicio, LocalDate dataFim, Seguradora seguradora) {
         this.id = numSeguros;
+        numSeguros++;
         this.dataInicio = dataInicio;
         this.dataFim = dataFim;
         this.seguradora = seguradora;

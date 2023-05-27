@@ -42,10 +42,11 @@ public class SeguroPF extends Seguro {
         for (int i = 0; i < listaCondutores.size(); i++) {
             sinistrosCondutores += listaCondutores.get(i).getListaSinistros().size();
         }
-        valor = valor * (1 + (1 / (cliente.getListaVeiculos().size() + 2))) 
-        * (2 + (cliente.getQtdeSinistros() / 10)) * (5 + (sinistrosCondutores/10));
-        valorMensal = valor;
-        return valorMensal;
+        valor *= (1 + (1 / ((double)(cliente.getListaVeiculos().size()) + 2)));
+        valor *= (2 + ((double)(cliente.getQtdeSinistros()) / 10));
+        valor *= (5 + ((double)(sinistrosCondutores)/10));
+        this.valorMensal = valor;
+        return valor;
     }
 
     public void gerarSinistro(String endereco, String cpfCondutor) {

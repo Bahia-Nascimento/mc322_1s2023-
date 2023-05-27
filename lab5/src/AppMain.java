@@ -1,8 +1,11 @@
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.Scanner;
 import java.util.ArrayList;
 
 public class AppMain {
+
+    private static final DecimalFormat reais = new DecimalFormat("0.00");
     public static void main(String[] args) {
         boolean flag = true;
         MenuOperacoes[] op = MenuOperacoes.values();
@@ -10,10 +13,10 @@ public class AppMain {
         ArrayList<Seguradora> listaSeguradoras = new ArrayList<Seguradora>();
         Scanner s = new Scanner(System.in);
         System.out.println("Bem vindo!");
-        testeLab();
+        testeLab(listaSeguradoras);
         while (flag) {
             System.out.println("1. Cadastros\n2. Listar\n3. Excluir\n4. Gerar Sinistro\n"
-            + "5. Transferir Seguro\n6. Calcular Receita Seguradora\n0. Sair");
+            + "5. Gerar Seguro\n6. Calcular Receita Seguradora\n0. Sair");
             e = Integer.parseInt(s.nextLine());
             clearScreen();
             int seg;
@@ -33,17 +36,20 @@ public class AppMain {
                 case GERAR_SINISTRO:
                     System.out.println("Indice da seguradora: ");
                     seg = Integer.parseInt(s.nextLine());
+                    clearScreen();
                     gerarSinistro(s, listaSeguradoras.get(seg));
                     break;
                 case GERAR_SEGURO:
                     System.out.println("Indice da seguradora: ");
                     seg = Integer.parseInt(s.nextLine());
+                    clearScreen();
                     gerarSeguro(s, listaSeguradoras.get(seg));
                     break;
                 case CALCULAR_RECEITA_SEGURADORA:
                     System.out.print("Indice da seguradora: ");
                     seg = Integer.parseInt(s.nextLine());
-                    System.out.println(listaSeguradoras.get(seg).calcularReceita());
+                    clearScreen();
+                    System.out.println(reais.format(listaSeguradoras.get(seg).calcularReceita()));
                     break;
                 default:
                     break;
@@ -191,11 +197,19 @@ public class AppMain {
                 System.out.print("Indice da seguradora: ");
                 seg = Integer.parseInt(s.nextLine());
                 clearScreen();
-                removerSinistro(s, listaSeguradoras.get(seg));
+                removerSeguro(s, listaSeguradoras.get(seg));
                 break;
             case CONDUTOR:
+                System.out.print("Indice da seguradora: ");
+                seg = Integer.parseInt(s.nextLine());
+                clearScreen();
+                removerCondutor(s, listaSeguradoras.get(seg));
                 break;
             case FROTA:
+                System.out.print("Indice da seguradora: ");
+                seg = Integer.parseInt(s.nextLine());
+                clearScreen();
+                removerFrota(s, listaSeguradoras.get(seg));
                 break;
             default:
                 return;
@@ -309,29 +323,49 @@ public class AppMain {
     public static void removerCliente(Scanner s, Seguradora seguradora) {
         System.out.print("Insira CPF ou CNPJ do cliente: ");
         String cadastro = s.nextLine();
+        clearScreen();
         if (!seguradora.removerCliente(cadastro)) {
-            clearScreen();
             System.out.println(cadastro + " nao encontrado");
             return;
         }
-        clearScreen();
         System.out.println(cadastro + " removido");
     }
     public static void removerVeiculo(Scanner s, Seguradora seguradora) {
+        /*  Remove um veiculo e o seguro pf associado caso exista
+            No caso do cliente ser pj, remove o veiculo de toda frota em que for encontrado */
         System.out.print("Insira CPF ou CNPJ do cliente: ");
         String cadastro = s.nextLine();
         Cliente cliente = seguradora.findCliente(cadastro);
+        clearScreen();
         if (cliente == null) {
-            clearScreen();
             System.out.println(cadastro + " nao encontrado");
             return;
         }
-        clearScreen();
         System.out.print("Insira placa do veiculo: ");
         String placa = s.nextLine();
-        if(!cliente.removerVeiculo(placa)) {
-            clearScreen();
-            System.out.println(placa + " nao encontrada");
+        clearScreen();
+        if (cliente instanceof ClientePF) {
+            if (!((ClientePF)cliente).removerVeiculo(placa)) {
+                System.out.println(placa + " nao encontrado neste cliente");
+                return;
+            }
+            for (Seguro seg : seguradora.getListaSeguros()) {
+                if (((SeguroPF)seg).getVeiculo().getPlaca().equals(placa)) {
+                    seguradora.cancelarSeguro(seg.getId());
+                }
+            }
+        } else {
+            ClientePJ pj = (ClientePJ)cliente;
+            Boolean encontrado = false;
+            for (Frota f : pj.getListaFrota()) {
+                if (pj.atualizarFrota(f.getCode(), placa)) {
+                    encontrado = true;
+                }
+            }
+            if (!encontrado) {
+                System.out.println(placa + " nao encontrado neste cliente");
+                return;    
+            }
         }
         System.out.println(placa + " removido");
     }
@@ -340,14 +374,15 @@ public class AppMain {
         System.out.print("Digite Id do seguro: ");
         int id = Integer.parseInt(s.nextLine());
         Seguro seguro = seguradora.findSeguro(id);
+        clearScreen();
         if (seguro == null) {
             System.out.println("Seguro nao encontrado");
             return;
         }
         System.out.print("CPF: ");
         String cpf = s.nextLine();
+        clearScreen();
         if (!Validacao.validaCPF(cpf)) {
-            clearScreen();
             System.out.println("CPF invalido");
             return;
         }
@@ -380,6 +415,30 @@ public class AppMain {
         clearScreen();
         System.out.println("Condutor " + cond.getNome() + " cadastrado no seguro " + id);
     }
+    public static void removerCondutor(Scanner s, Seguradora seguradora) {
+        // Desautoriza um condutor do seguro especificado, mantem o condutor cadastrado na seguradora para interesse futuro
+        System.out.print("Digite Id do seguro: ");
+        int id = Integer.parseInt(s.nextLine());
+        Seguro seguro = seguradora.findSeguro(id);
+        clearScreen();
+        if (seguro == null) {
+            System.out.println("Seguro nao encontrado");
+            return;
+        }
+        System.out.print("CPF: ");
+        String cpf = s.nextLine();
+        clearScreen();
+        if (!Validacao.validaCPF(cpf)) {
+            System.out.println("CPF invalido");
+            return;
+        }
+        if (seguro.desautorizarCondutor(cpf)) {
+            System.out.println(cpf + " desautorizado no seguro " + id);
+        } else {
+            System.out.println(cpf + " nao estava cadastrado no seguro " + id);
+        }
+
+    }
     public static void cadastrarFrota(Scanner s, Seguradora seguradora) {
         // Frota sempre eh cadastrada vazia, responsabilidade do usuario gerencia-la
         System.out.print("Digite CNPJ do cliente: ");
@@ -395,6 +454,31 @@ public class AppMain {
         cliente.cadastrarFrota(code);
         clearScreen();
         System.out.println("Frota " + code + " cadastrada para " + cliente.getNome());
+    }
+    public static void removerFrota(Scanner s, Seguradora seguradora) {
+        // Remove uma frota e o seguro associado se existente
+        System.out.print("Digite CNPJ do cliente: ");
+        String cadastro = s.nextLine();
+        ClientePJ cliente = (ClientePJ)seguradora.findCliente(cadastro);
+        clearScreen();
+        if (cliente == null) {
+            System.out.println("Cliente nao encontrado");
+            return;
+        }
+        System.out.print("Insira code da frota: ");
+        String code = s.nextLine();
+        clearScreen();
+        if (!cliente.atualizarFrota(code)) {
+            System.out.println(code + " nao encontrada");
+            return;
+        }
+        clearScreen();
+        for (Seguro seg : seguradora.getSegurosPorCliente(cliente)) {
+            if (((SeguroPJ)seg).getFrota().getCode().equals(code)) {
+                seguradora.cancelarSeguro(seg.getId());
+            }
+        }
+        System.out.println(code + " removida com sucesso");
     }
     public static void gerarSinistro(Scanner s, Seguradora seguradora) {
         System.out.print("Id do seguro: ");
@@ -421,70 +505,129 @@ public class AppMain {
     public static void gerarSeguro(Scanner s, Seguradora seguradora) {
         System.out.print("Insira CPF ou CNPJ do cliente: ");
         String cadastro = s.nextLine();
+        clearScreen();
         if (Validacao.validaCPF(cadastro)) {
             ClientePF cliente = (ClientePF)seguradora.findCliente(cadastro);
             System.out.print("Insira placa do veiculo: ");
             String placa = s.nextLine();
             Veiculo v = cliente.findVeiculo(placa);
+            clearScreen();
             if (v == null) {
                 System.out.println("Veiculo nao encontrado");
                 return;
             }
+            clearScreen();
             seguradora.gerarSeguro(cliente, v);
         } else if (Validacao.validaCNPJ(cadastro)) {
             ClientePJ cliente = (ClientePJ)seguradora.findCliente(cadastro);
             System.out.print("Insira code da frota: ");
             String code = s.nextLine();
             Frota f = cliente.findFrota(code);
+            clearScreen();
             if (f == null) {
                 System.out.println("Frota nao encontrada");
                 return;
             }
+            clearScreen();
             seguradora.gerarSeguro(cliente, f);
         } else {
             System.out.println("CPF ou CNPJ invalido");
+            return;
         }
     }
-    // public static void testeLab() {
-    //     // Executa os teste pedidos no lab atual (lab 5)
+    public static void removerSeguro(Scanner s, Seguradora seguradora) {
+        System.out.print("Digite Id do seguro: ");
+        int id = Integer.parseInt(s.nextLine());
+        if (!seguradora.cancelarSeguro(id)) {
+            System.out.println("Seguro nao encontrado");
+            return;
+        }
+        clearScreen();
+        System.out.println("Seguro " + id + " removido");
+    }
+    public static void testeLab(ArrayList<Seguradora> listaSeguradoras) {
+        // Executa os teste pedidos no lab atual (lab 5)
 
-    //     // Instanciando cliente PF:
-    //     System.out.println("Cadastrando um cliente PF");
-    //     ClientePF testePf = new ClientePF("Jorge", "Rua x", "731.275.720-00", LocalDate.of(2002, 12, 20), 
-    //     "Ensino superior", "Masculino", LocalDate.of(2020, 10, 21));
-    //     seg.cadastrarCliente(testePf);
-    //     clearScreen();
-    //     System.out.println(testePf.toString() + "\nCliente cadastrado\n");
+        // Instanciando seguradora
+        Seguradora seguradora = new Seguradora("34.420.729/0001-39", "Seguranca seguros", "19 94568-8547",
+        "email@email.com", "Saturnino de brito");
+        listaSeguradoras.add(seguradora);
+        System.out.println(seguradora.toString());
+        System.out.println("cadastrada no indice 0");
+        System.out.println();
+
+        // Instanciando clientes
+        ClientePF pf = new ClientePF("Cleber", "Albert Einstein", "85 91658-2145",  "cleber@email.com",
+        "702.023.860-23", LocalDate.of(1995, 10, 8), "Ensino medio", "Masculino", LocalDate.of(2019, 5, 14));
+        seguradora.cadastrarCliente(pf);
+        System.out.println(pf.toString());
+        ClientePJ pj = new ClientePJ("Coxinhas", "Cora Coralina", "19 97548-5472", "coxinhas@email.br",
+        LocalDate.of(2010, 5, 10), "88.465.207/0001-82", 4);
+        seguradora.cadastrarCliente(pj);
+        System.out.println(pj.toString());
+        System.out.println("Clientes cadastrados");
+        System.out.println();
+
+        // Instanciando frotas
+        pj.cadastrarFrota("frotateste");
+        pj.cadastrarFrota("outroteste");
+        System.out.println();
+
+        // Instanciando veiculos
+        Veiculo v1 = new Veiculo("HVI-4097", "Chervrolet", "Chevette", 1989);
+        pf.cadastrarVeiculo(v1);
+        System.out.println(v1.toString());
+        System.out.println("Cadastrado para Cleber");
+        Veiculo v2 = new Veiculo("AKA-2000", "Ford", "Ranger", 1998);
+        pj.atualizarFrota("frotateste", v2);
+        System.out.println(v2.toString());
+        System.out.println("Cadastrado para Coxinhas em frotateste");
+        Veiculo v3 = new Veiculo("IRM-0340", "Land Rover", "Freelander", 2004);
+        pj.atualizarFrota("outroteste", v3);
+        System.out.println(v3.toString());
+        System.out.println("Cadastrado para Coxinhas em outroteste");
+        System.out.println();
         
-    //     // Instanciando cliente PJ:
-    //     System.out.println("Cadastrando um cliente PJ");
-    //     ClientePJ testePj = new ClientePJ("Pastelaria", "Rua y", LocalDate.of(1999, 5, 10),
-    //     "46.068.425/0001-33", 6);
-    //     seg.cadastrarCliente(testePj);
-    //     clearScreen();
-    //     System.out.println(testePj.toString() + "\nCliente cadastrado\n");
+        // Instanciando seguros
+        seguradora.gerarSeguro(pf, v1);
+        seguradora.gerarSeguro(pj, pj.findFrota("frotateste"));
+        seguradora.gerarSeguro(pj, pj.findFrota("outroteste"));
+        System.out.println();
 
-    //     // Um veiculo para cada:
-    //     System.out.println("Cadastrando um veiculo para cada cliente");
-    //     Veiculo carroPf = new Veiculo("JVZ-9341", "Ford", "Fusion", 2022);
-    //     testePf.cadastrarVeiculo(carroPf);
-    //     System.out.println(carroPf.toString() + "\nCadastrado para " + testePf.getNome());
-    //     Veiculo carroPj = new Veiculo("NEP-0842", "Fiat", "Uno", 2000);
-    //     testePj.cadastrarVeiculo(carroPj);
-    //     System.out.println(carroPj.toString() + "\nCadastrado para " + testePj.getNome() + "\n");
+        // Instanciando condutores
+        Condutor c1 = new Condutor(pf.getCadastro(), pf.getNome(), pf.getTelefone(), pf.getEndereco(), pf.getEmail(), pf.getDataNascimento());
+        seguradora.cadastrarCondutor(c1);
+        seguradora.findSeguro(0).autorizarCondutor(c1);
+        System.out.println(c1.toString());
+        System.out.println("Autorizado no seguro 0");
+        Condutor c2 = new Condutor("079.884.700-00", "Tonhao", "71 98985-4652", "Mendelev",
+        "tonhao1@email.com", LocalDate.of(1980, 9, 9));
+        seguradora.cadastrarCondutor(c2);
+        seguradora.findSeguro(1).autorizarCondutor(c2);
+        seguradora.findSeguro(2).autorizarCondutor(c2);
+        System.out.println(c2.toString());
+        System.out.println("Autorizado nos seguros 1 e 2");
+        System.out.println();
 
-    //     // Um sinistro para cada cliente:
-    //     seg.gerarSinistro(carroPf, testePf, "Esquina");
-    //     seg.gerarSinistro(carroPj, testePj, "Rotatoria");
-    //     System.out.println("");
+        // Instanciando sinistro
+        seguradora.findSeguro(1).gerarSinistro("esquina", "079.884.700-00");
+        System.out.println(seguradora.getSinistrosPorCliente(pj).get(0).toString());
+        System.out.println();
 
-    //     // Chamando alguns metodos:
-    //     System.out.println("Listando os clientes tipo PF:");
-    //     seg.listarClientes("PF");
-    //     System.out.println("\nListando os sinistros da pastelaria");
-    //     seg.visualizarSinistros(testePj);
-    //     System.out.println("\nListando todos os sinistros da seguradora " + seg.getNome());
-    //     seg.listarSinistros();
-    //     System.out.println("\nValor da receita da seguradora: " + seg.calcularReceita());
-    // }
+        // Receita
+        System.out.println("Receita: " + reais.format(seguradora.calcularReceita()));
+        System.out.println();
+
+        // Removendo um seguro
+        seguradora.cancelarSeguro(1);
+        System.out.println();
+
+        // Listando seguros
+        seguradora.listSeguros();
+        System.out.println();
+
+        // Receita
+        System.out.println("Receita: " + reais.format(seguradora.calcularReceita()));
+        System.out.println();
+    }
 }

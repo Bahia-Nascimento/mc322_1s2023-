@@ -35,10 +35,13 @@ public class SeguroPJ extends Seguro {
             sinistrosCondutores += listaCondutores.get(i).getListaSinistros().size();
         }
         int idade = (Period.between(this.cliente.getDataFundacao(), LocalDate.now())).getYears();
-        valor = valor * (10 + cliente.getQtdeFuncionarios()/10) * (1+ (1/(frota.getListaVeiculos().size() + 2))) * (1 + (1/(idade + 2)))
-        * (2 + cliente.getQtdeSinistros()/10) * (5 + sinistrosCondutores/10);
-        valorMensal = valor;
-        return valorMensal;
+        valor *= (10 + ((double)(cliente.getQtdeFuncionarios())/10));
+        valor *= (1 + 1/((double)(frota.getListaVeiculos().size()) + 2));
+        valor *= (1 + 1/((double)(idade) + 2));
+        valor *= (2 + (double)(cliente.getQtdeSinistros())/10);
+        valor *= (5 + (double)(sinistrosCondutores)/10);
+        this.valorMensal = valor;
+        return valor;
     }
 
     public void gerarSinistro(String endereco, String cpfCondutor) {
