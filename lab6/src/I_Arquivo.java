@@ -1,5 +1,8 @@
-interface I_Arquivo {
+import java.util.ArrayList;
 
-    Boolean gravarArquivo(String caminho);
-    String lerArquivo();
+interface I_Arquivo<T> {
+
+
+    Boolean gravarArquivo(String caminho, T o);
+    ArrayList<String> lerArquivo(String caminho);
 }

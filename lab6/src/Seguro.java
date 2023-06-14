@@ -1,9 +1,7 @@
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public abstract class Seguro implements I_Arquivo {
+public abstract class Seguro {
     protected static int numSeguros = 0;
     protected final int id;
     protected LocalDate dataInicio;
@@ -98,40 +96,6 @@ public abstract class Seguro implements I_Arquivo {
             }
         }
         return null;
-    }
-
-    public Boolean gravarArquivo(String caminho) {
-        // Adiciona uma linha com as informacoes do objeto no arquivo em formato CSV especificado
-
-        try {
-            FileWriter w = new FileWriter(caminho);
-            String linha = id + ", " + dataInicio.toString() + ", " + dataFim + ", "
-            + seguradora.getNome() + ", \"";
-            for (Sinistro s : listaSinistros) {
-                linha += s.getId() + ","; 
-            }
-            linha += "\", ";
-            for (Condutor c : listaCondutores) {
-                linha += c.getCpf() + ","; 
-            }
-            linha += "\", ";
-            linha += valorMensal;
-
-            w.write(linha);
-            w.close();
-        } catch (IOException e) {
-            System.out.println("Erro ao escrever no arquivo " + caminho);
-            return false;
-        }
-
-
-        return true;
-    }
-
-    public String lerArquivo() {
-        String arq = "placeholder";
-
-        return arq;
     }
 
     public abstract void gerarSinistro(String endereco, String cpfCondutor);
