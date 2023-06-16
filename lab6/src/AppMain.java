@@ -16,7 +16,7 @@ public class AppMain {
         testeLab(listaSeguradoras);
         while (flag) {
             System.out.println("1. Cadastros\n2. Listar\n3. Excluir\n4. Gerar Sinistro\n"
-            + "5. Gerar Seguro\n6. Calcular Receita Seguradora\n0. Sair");
+            + "5. Gerar Seguro\n6. Calcular Receita Seguradora\n7. Gravar Arquivos\n0. Sair");
             e = Integer.parseInt(s.nextLine());
             clearScreen();
             int seg;
@@ -51,7 +51,13 @@ public class AppMain {
                     clearScreen();
                     System.out.println(reais.format(listaSeguradoras.get(seg).calcularReceita()));
                     break;
-                default:
+                case GRAVAR_ARQUIVOS:
+                    System.out.print("Indice da seguradora: ");
+                    seg = Integer.parseInt(s.nextLine());
+                    clearScreen();
+                    gravaArquivos(listaSeguradoras.get(seg));
+                    break;
+                    default:
                     break;
             }
         }
@@ -629,5 +635,20 @@ public class AppMain {
         // Receita
         System.out.println("Receita: " + reais.format(seguradora.calcularReceita()));
         System.out.println();
+    }
+    public static void gravaArquivos(Seguradora seg) {
+        // Grava todos os arquivos necessarios da seguradora especificada
+
+        ArquivoSeguro arqSeg = new ArquivoSeguro("/home/cc2022/ra222103/diretorio/mc322_1s2023-/lab6/saida/teste_Seguro.csv");
+        for (Seguro s : seg.getListaSeguros()) {
+            arqSeg.gravarArquivo(s);
+        }
+        ArquivoSinistro arqSin = new ArquivoSinistro("/home/cc2022/ra222103/diretorio/mc322_1s2023-/lab6/saida/teste_Sinistro.csv");
+        for (Cliente cliente : seg.getListaClientes()) {
+            for (Sinistro s : seg.getSinistrosPorCliente(cliente)) {
+                arqSin.gravarArquivo(s);
+            }
+
+        }
     }
 }

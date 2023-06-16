@@ -5,7 +5,8 @@ public enum MenuOperacoes {
     EXCLUIR(3),
     GERAR_SINISTRO(4),
     GERAR_SEGURO(5),
-    CALCULAR_RECEITA_SEGURADORA(6);
+    CALCULAR_RECEITA_SEGURADORA(6),
+    GRAVAR_ARQUIVOS(7);
 
 
     public final int operacao;
