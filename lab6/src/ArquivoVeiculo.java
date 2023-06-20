@@ -5,32 +5,30 @@ import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-public class ArquivoSinistro implements I_Arquivo<Sinistro> {
+public class ArquivoVeiculo implements I_Arquivo<Veiculo> {
     private String caminho;
 
-    public ArquivoSinistro(String caminho) {
+    public ArquivoVeiculo(String caminho) {
         try {
             FileWriter w = new FileWriter(caminho);
             this.caminho = caminho;
-            w.write("ID, DATA, ENDERECO, CONDUTOR, SEGURO\n");
+            w.write("Veiculos\n");
             w.close();
-            System.out.println("Arquivo de sinistros criado com sucesso");
+            System.out.println("Arquivo de veiculos criado com sucesso");
         } catch (IOException e) {
             System.out.println("Erro ao criar o arquivo " + caminho);
         }
     }
     
-    public Boolean gravarArquivo(Sinistro s) {
+    public Boolean gravarArquivo(Veiculo c) {
         // Adiciona uma linha com as informacoes do objeto no arquivo em formato CSV especificado
 
         try {
             FileWriter w = new FileWriter(caminho, true);
-            String linha = s.getId() + ", " + s.getData().toString() + ", " + s.getEndereco() + ", "
-            + s.getCondutor().getCpf() + ", " + s.getSeguro().getId();
-            w.write(linha + "\n");
+            w.write(c.toString() + "\n");
             w.close();
         } catch (IOException e) {
-            System.out.println("Erro ao escrever no arquivo " + caminho);
+            System.out.println("Erro ao criar o arquivo " + caminho);
             return false;
         }
 
