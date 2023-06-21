@@ -10,9 +10,18 @@ public class Seguradora {
     private ArrayList<Cliente> listaClientes;
     private ArrayList<Seguro> listaSeguros;
     private ArrayList<Condutor> listaCondutores;
-    
+    private final ArquivoSeguro arqSeguro;
+    private final ArquivoSinistro arqSinistro;
+    private final ArquivoClientePF arqClientePF;
+    private final ArquivoClientePJ arqClientePJ;
+    private final ArquivoCondutor arqCondutor;
+    private final ArquivoFrota arqFrota;
+    private final ArquivoVeiculo arqVeiculo;
+
     // Construtor
-    public Seguradora(String cnpj, String nome, String telefone, String email, String endereco) {
+    public Seguradora(String cnpj, String nome, String telefone, String email, String endereco, String caminho) {
+        // O caminho passado deve ser o de uma pasta, terminando sempre em '/'
+        // e sera tratado como o caminho de leitura e escrita de dados
         this.cnpj = cnpj;
         this.nome = nome;
         this.telefone = telefone;
@@ -21,6 +30,13 @@ public class Seguradora {
         this.listaClientes = new ArrayList<Cliente>();
         this.listaSeguros = new ArrayList<Seguro>();
         this.listaCondutores = new ArrayList<Condutor>();
+        this.arqSeguro = new ArquivoSeguro(caminho + "seguro.csv");
+        this.arqSinistro = new ArquivoSinistro(caminho + "sinistro.csv");
+        this.arqClientePF = new ArquivoClientePF(caminho + "clientePF.csv");
+        this.arqClientePJ = new ArquivoClientePJ(caminho + "clientePJ.csv");
+        this.arqCondutor = new ArquivoCondutor(caminho + "condutor.csv");
+        this.arqFrota = new ArquivoFrota(caminho + "frota.csv");
+        this.arqVeiculo = new ArquivoVeiculo(caminho + "veiculo.csv");
     }
 
     // Getters
@@ -235,4 +251,27 @@ public class Seguradora {
             "}";
     }
 
+    public void gravar() {
+        for (Seguro s : listaSeguros) {
+            arqSeguro.gravarArquivo(s);
+        }
+        for (Cliente cliente : listaClientes) {
+            for (Sinistro s : getSinistrosPorCliente(cliente)) {
+                arqSinistro.gravarArquivo(s);
+            }
+
+        }
+    }
+
+    public void lerArquivos() {
+        ArrayList<Veiculo> veiculos = new ArrayList<Veiculo>();
+        for (String linha : arqVeiculo.lerArquivo()) {
+            String[] array = linha.split(",");
+            veiculos.add(new Veiculo(array[0], array[1], array[2], Integer.parseInt(array[3])));
+        }
+        ArrayList<String> clientesPF = arqClientePF.lerArquivo();
+        ArrayList<String> clientesPJ = arqClientePJ.lerArquivo();
+        ArrayList<String> condutores = arqCondutor.lerArquivo();
+        ArrayList<String> frotas = arqFrota.lerArquivo();
+    }
 }

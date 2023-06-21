@@ -9,15 +9,7 @@ public class ArquivoFrota implements I_Arquivo<Frota> {
     private String caminho;
 
     public ArquivoFrota(String caminho) {
-        try {
-            FileWriter w = new FileWriter(caminho);
-            this.caminho = caminho;
-            w.write("Frotas\n");
-            w.close();
-            System.out.println("Arquivo de frotas criado com sucesso");
-        } catch (IOException e) {
-            System.out.println("Erro ao criar o arquivo " + caminho);
-        }
+        this.caminho = caminho;
     }
     
     public Boolean gravarArquivo(Frota c) {
@@ -36,7 +28,7 @@ public class ArquivoFrota implements I_Arquivo<Frota> {
         return true;
     }
 
-    public ArrayList<String> lerArquivo(String caminho) {
+    public ArrayList<String> lerArquivo() {
         ArrayList<String> lista = new ArrayList<String>();
         try {
             File f = new File(caminho);

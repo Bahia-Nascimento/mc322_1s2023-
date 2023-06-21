@@ -9,15 +9,7 @@ public class ArquivoCondutor implements I_Arquivo<Condutor> {
     private String caminho;
 
     public ArquivoCondutor(String caminho) {
-        try {
-            FileWriter w = new FileWriter(caminho);
-            this.caminho = caminho;
-            w.write("Condutores\n");
-            w.close();
-            System.out.println("Arquivo de condutores criado com sucesso");
-        } catch (IOException e) {
-            System.out.println("Erro ao criar o arquivo " + caminho);
-        }
+        this.caminho = caminho;
     }
     
     public Boolean gravarArquivo(Condutor c) {
@@ -36,7 +28,7 @@ public class ArquivoCondutor implements I_Arquivo<Condutor> {
         return true;
     }
 
-    public ArrayList<String> lerArquivo(String caminho) {
+    public ArrayList<String> lerArquivo() {
         ArrayList<String> lista = new ArrayList<String>();
         try {
             File f = new File(caminho);

@@ -6,12 +6,12 @@ import java.util.ArrayList;
 public class AppMain {
 
     private static final DecimalFormat reais = new DecimalFormat("0.00");
+    public static final Scanner s = new Scanner(System.in);
     public static void main(String[] args) {
         boolean flag = true;
         MenuOperacoes[] op = MenuOperacoes.values();
         int e;
         ArrayList<Seguradora> listaSeguradoras = new ArrayList<Seguradora>();
-        Scanner s = new Scanner(System.in);
         System.out.println("Bem vindo!");
         testeLab(listaSeguradoras);
         while (flag) {
@@ -55,7 +55,8 @@ public class AppMain {
                     System.out.print("Indice da seguradora: ");
                     seg = Integer.parseInt(s.nextLine());
                     clearScreen();
-                    gravaArquivos(listaSeguradoras.get(seg));
+                    listaSeguradoras.get(seg).gravar();
+                    System.out.println("Gravacao finalizada");;
                     break;
                     default:
                     break;
@@ -236,7 +237,9 @@ public class AppMain {
         String telefone = s.nextLine();
         System.out.print("Email: ");
         String email = s.nextLine();
-        return new Seguradora(cnpj, nome, telefone, email, endereco);
+        System.out.print("Caminho de arquivos: ");
+        String caminho = s.nextLine();
+        return new Seguradora(cnpj, nome, telefone, email, endereco, caminho);
     }
     public static void cadastrarCliente(Scanner s, Seguradora seguradora) {
         System.out.print("1. Cliente PF\n2. Cliente PJ\n");
@@ -552,11 +555,13 @@ public class AppMain {
         System.out.println("Seguro " + id + " removido");
     }
     public static void testeLab(ArrayList<Seguradora> listaSeguradoras) {
-        // Executa os teste pedidos no lab atual (lab 5)
+        // Executa os teste pedidos no lab atual (lab 6)
 
         // Instanciando seguradora
+        System.out.println("Insira o caminho da pasta de arquivos da seguradora inicial (ex: /home/.../)");
         Seguradora seguradora = new Seguradora("34.420.729/0001-39", "Seguranca seguros", "19 94568-8547",
-        "email@email.com", "Saturnino de brito");
+        "email@email.com", "Saturnino de brito", s.nextLine());
+        clearScreen();
         listaSeguradoras.add(seguradora);
         System.out.println(seguradora.toString());
         System.out.println("cadastrada no indice 0");
@@ -636,19 +641,5 @@ public class AppMain {
         System.out.println("Receita: " + reais.format(seguradora.calcularReceita()));
         System.out.println();
     }
-    public static void gravaArquivos(Seguradora seg) {
-        // Grava todos os arquivos necessarios da seguradora especificada
-
-        ArquivoSeguro arqSeg = new ArquivoSeguro("/home/cc2022/ra222103/diretorio/mc322_1s2023-/lab6/saida/teste_Seguro.csv");
-        for (Seguro s : seg.getListaSeguros()) {
-            arqSeg.gravarArquivo(s);
-        }
-        ArquivoSinistro arqSin = new ArquivoSinistro("/home/cc2022/ra222103/diretorio/mc322_1s2023-/lab6/saida/teste_Sinistro.csv");
-        for (Cliente cliente : seg.getListaClientes()) {
-            for (Sinistro s : seg.getSinistrosPorCliente(cliente)) {
-                arqSin.gravarArquivo(s);
-            }
-
-        }
-    }
+    
 }

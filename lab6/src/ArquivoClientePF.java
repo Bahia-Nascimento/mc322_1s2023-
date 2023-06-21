@@ -9,15 +9,7 @@ public class ArquivoClientePF implements I_Arquivo<ClientePF> {
     private String caminho;
 
     public ArquivoClientePF(String caminho) {
-        try {
-            FileWriter w = new FileWriter(caminho);
-            this.caminho = caminho;
-            w.write("ClientesPF\n");
-            w.close();
-            System.out.println("Arquivo de Clientes PF criado com sucesso");
-        } catch (IOException e) {
-            System.out.println("Erro ao criar o arquivo " + caminho);
-        }
+        this.caminho = caminho;
     }
     
     public Boolean gravarArquivo(ClientePF c) {
@@ -36,7 +28,7 @@ public class ArquivoClientePF implements I_Arquivo<ClientePF> {
         return true;
     }
 
-    public ArrayList<String> lerArquivo(String caminho) {
+    public ArrayList<String> lerArquivo() {
         ArrayList<String> lista = new ArrayList<String>();
         try {
             File f = new File(caminho);

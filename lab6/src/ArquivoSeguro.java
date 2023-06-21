@@ -59,7 +59,7 @@ public class ArquivoSeguro implements I_Arquivo<Seguro> {
         return true;
     }
 
-    public ArrayList<String> lerArquivo(String caminho) {
+    public ArrayList<String> lerArquivo() {
         ArrayList<String> lista = new ArrayList<String>();
         try {
             File f = new File(caminho);
