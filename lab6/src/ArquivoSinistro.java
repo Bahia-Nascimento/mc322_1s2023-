@@ -9,14 +9,20 @@ public class ArquivoSinistro implements I_Arquivo<Sinistro> {
     private String caminho;
 
     public ArquivoSinistro(String caminho) {
+        this.caminho = caminho;
+    }
+
+    public Boolean initArquivo() {
+        // Gera o arquivo e escreve o cabecalho
         try {
             FileWriter w = new FileWriter(caminho);
-            this.caminho = caminho;
             w.write("ID, DATA, ENDERECO, CONDUTOR, SEGURO\n");
             w.close();
             System.out.println("Arquivo de sinistros criado com sucesso");
+            return true;
         } catch (IOException e) {
             System.out.println("Erro ao criar o arquivo " + caminho);
+            return false;
         }
     }
     

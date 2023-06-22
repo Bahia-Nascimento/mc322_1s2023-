@@ -252,14 +252,18 @@ public class Seguradora {
     }
 
     public void gravar() {
-        for (Seguro s : listaSeguros) {
-            arqSeguro.gravarArquivo(s);
-        }
-        for (Cliente cliente : listaClientes) {
-            for (Sinistro s : getSinistrosPorCliente(cliente)) {
-                arqSinistro.gravarArquivo(s);
+        if (arqSeguro.initArquivo()) {
+            for (Seguro s : listaSeguros) {
+                arqSeguro.gravarArquivo(s);
             }
-
+        }
+        if (arqSinistro.initArquivo()) {
+            for (Cliente cliente : listaClientes) {
+                for (Sinistro s : getSinistrosPorCliente(cliente)) {
+                    arqSinistro.gravarArquivo(s);
+                }
+    
+            }
         }
     }
 

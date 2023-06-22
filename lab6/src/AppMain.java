@@ -558,9 +558,8 @@ public class AppMain {
         // Executa os teste pedidos no lab atual (lab 6)
 
         // Instanciando seguradora
-        System.out.println("Insira o caminho da pasta de arquivos da seguradora inicial (ex: /home/.../)");
         Seguradora seguradora = new Seguradora("34.420.729/0001-39", "Seguranca seguros", "19 94568-8547",
-        "email@email.com", "Saturnino de brito", s.nextLine());
+        "email@email.com", "Saturnino de brito", "arquivos/");
         clearScreen();
         listaSeguradoras.add(seguradora);
         System.out.println(seguradora.toString());
@@ -577,5 +576,8 @@ public class AppMain {
         seguradora.getListaSeguros().get(2).autorizarCondutor(seguradora.getListaCondutores().get(2));
         seguradora.getListaSeguros().get(2).gerarSinistro("Rua da esquina", seguradora.getListaCondutores().get(2).getCpf());
         System.out.println("");
+
+        // Gravando
+        seguradora.gravar();
     }   
 }

@@ -9,17 +9,23 @@ public class ArquivoSeguro implements I_Arquivo<Seguro> {
     private String caminho;
 
     public ArquivoSeguro(String caminho) {
+        this.caminho = caminho;
+    }
+    
+    public Boolean initArquivo() {
+        // Gera o arquivo e escreve o cabecalho
         try {
             FileWriter w = new FileWriter(caminho);
-            this.caminho = caminho;
             w.write("ID, DATA_INICIO, DATA_FIM, SEGURADORA, LISTA_SINISTROS, LISTA_CONDUTORES, VALOR_MENSAL\n");
             w.close();
             System.out.println("Arquivo de seguros criado com sucesso");
+            return true;
         } catch (IOException e) {
             System.out.println("Erro ao criar o arquivo " + caminho);
+            return false;
         }
     }
-    
+
     public Boolean gravarArquivo(Seguro s) {
         // Adiciona uma linha com as informacoes do objeto no arquivo em formato CSV especificado
 
