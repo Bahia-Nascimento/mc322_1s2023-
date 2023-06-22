@@ -564,82 +564,18 @@ public class AppMain {
         clearScreen();
         listaSeguradoras.add(seguradora);
         System.out.println(seguradora.toString());
-        System.out.println("cadastrada no indice 0");
-        System.out.println();
+        System.out.println("cadastrada no indice 0\n");
 
-        // Instanciando clientes
-        ClientePF pf = new ClientePF("Cleber", "Albert Einstein", "85 91658-2145",  "cleber@email.com",
-        "702.023.860-23", LocalDate.of(1995, 10, 8), "Ensino medio", "Masculino", LocalDate.of(2019, 5, 14));
-        seguradora.cadastrarCliente(pf);
-        System.out.println(pf.toString());
-        ClientePJ pj = new ClientePJ("Coxinhas", "Cora Coralina", "19 97548-5472", "coxinhas@email.br",
-        LocalDate.of(2010, 5, 10), "88.465.207/0001-82", 4);
-        seguradora.cadastrarCliente(pj);
-        System.out.println(pj.toString());
-        System.out.println("Clientes cadastrados");
-        System.out.println();
+        // Instanciando objetos dos arquivos
+        seguradora.lerArquivos();
 
-        // Instanciando frotas
-        pj.cadastrarFrota("frotateste");
-        pj.cadastrarFrota("outroteste");
-        System.out.println();
-
-        // Instanciando veiculos
-        Veiculo v1 = new Veiculo("HVI-4097", "Chervrolet", "Chevette", 1989);
-        pf.cadastrarVeiculo(v1);
-        System.out.println(v1.toString());
-        System.out.println("Cadastrado para Cleber");
-        Veiculo v2 = new Veiculo("AKA-2000", "Ford", "Ranger", 1998);
-        pj.atualizarFrota("frotateste", v2);
-        System.out.println(v2.toString());
-        System.out.println("Cadastrado para Coxinhas em frotateste");
-        Veiculo v3 = new Veiculo("IRM-0340", "Land Rover", "Freelander", 2004);
-        pj.atualizarFrota("outroteste", v3);
-        System.out.println(v3.toString());
-        System.out.println("Cadastrado para Coxinhas em outroteste");
-        System.out.println();
-        
-        // Instanciando seguros
-        seguradora.gerarSeguro(pf, v1);
-        seguradora.gerarSeguro(pj, pj.findFrota("frotateste"));
-        seguradora.gerarSeguro(pj, pj.findFrota("outroteste"));
-        System.out.println();
-
-        // Instanciando condutores
-        Condutor c1 = new Condutor(pf.getCadastro(), pf.getNome(), pf.getTelefone(), pf.getEndereco(), pf.getEmail(), pf.getDataNascimento());
-        seguradora.cadastrarCondutor(c1);
-        seguradora.findSeguro(0).autorizarCondutor(c1);
-        System.out.println(c1.toString());
-        System.out.println("Autorizado no seguro 0");
-        Condutor c2 = new Condutor("079.884.700-00", "Tonhao", "71 98985-4652", "Mendelev",
-        "tonhao1@email.com", LocalDate.of(1980, 9, 9));
-        seguradora.cadastrarCondutor(c2);
-        seguradora.findSeguro(1).autorizarCondutor(c2);
-        seguradora.findSeguro(2).autorizarCondutor(c2);
-        System.out.println(c2.toString());
-        System.out.println("Autorizado nos seguros 1 e 2");
-        System.out.println();
-
-        // Instanciando sinistro
-        seguradora.findSeguro(1).gerarSinistro("esquina", "079.884.700-00");
-        System.out.println(seguradora.getSinistrosPorCliente(pj).get(0).toString());
-        System.out.println();
-
-        // Receita
-        System.out.println("Receita: " + reais.format(seguradora.calcularReceita()));
-        System.out.println();
-
-        // Removendo um seguro
-        seguradora.cancelarSeguro(1);
-        System.out.println();
-
-        // Listando seguros
-        seguradora.listSeguros();
-        System.out.println();
-
-        // Receita
-        System.out.println("Receita: " + reais.format(seguradora.calcularReceita()));
-        System.out.println();
-    }
-    
+        // Instanciando sinistros
+        seguradora.getListaSeguros().get(0).autorizarCondutor(seguradora.getListaCondutores().get(0));
+        seguradora.getListaSeguros().get(0).gerarSinistro("Rua da palha", seguradora.getListaCondutores().get(0).getCpf());
+        seguradora.getListaSeguros().get(1).autorizarCondutor(seguradora.getListaCondutores().get(1));
+        seguradora.getListaSeguros().get(1).gerarSinistro("Rua da arroz", seguradora.getListaCondutores().get(1).getCpf());
+        seguradora.getListaSeguros().get(2).autorizarCondutor(seguradora.getListaCondutores().get(2));
+        seguradora.getListaSeguros().get(2).gerarSinistro("Rua da esquina", seguradora.getListaCondutores().get(2).getCpf());
+        System.out.println("");
+    }   
 }

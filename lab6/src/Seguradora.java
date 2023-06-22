@@ -30,13 +30,13 @@ public class Seguradora {
         this.listaClientes = new ArrayList<Cliente>();
         this.listaSeguros = new ArrayList<Seguro>();
         this.listaCondutores = new ArrayList<Condutor>();
-        this.arqSeguro = new ArquivoSeguro(caminho + "seguro.csv");
-        this.arqSinistro = new ArquivoSinistro(caminho + "sinistro.csv");
-        this.arqClientePF = new ArquivoClientePF(caminho + "clientePF.csv");
-        this.arqClientePJ = new ArquivoClientePJ(caminho + "clientePJ.csv");
-        this.arqCondutor = new ArquivoCondutor(caminho + "condutor.csv");
-        this.arqFrota = new ArquivoFrota(caminho + "frota.csv");
-        this.arqVeiculo = new ArquivoVeiculo(caminho + "veiculo.csv");
+        this.arqSeguro = new ArquivoSeguro(caminho + "seguros.csv");
+        this.arqSinistro = new ArquivoSinistro(caminho + "sinistros.csv");
+        this.arqClientePF = new ArquivoClientePF(caminho + "clientesPF.csv");
+        this.arqClientePJ = new ArquivoClientePJ(caminho + "clientesPJ.csv");
+        this.arqCondutor = new ArquivoCondutor(caminho + "condutores.csv");
+        this.arqFrota = new ArquivoFrota(caminho + "frotas.csv");
+        this.arqVeiculo = new ArquivoVeiculo(caminho + "veiculos.csv");
     }
 
     // Getters
@@ -264,14 +264,72 @@ public class Seguradora {
     }
 
     public void lerArquivos() {
+        // Lendo veiculos
+        System.out.println("Instanciando veiculos:");
         ArrayList<Veiculo> veiculos = new ArrayList<Veiculo>();
         for (String linha : arqVeiculo.lerArquivo()) {
             String[] array = linha.split(",");
             veiculos.add(new Veiculo(array[0], array[1], array[2], Integer.parseInt(array[3])));
+            System.out.println(veiculos.get(veiculos.size() - 1).toString());
         }
-        ArrayList<String> clientesPF = arqClientePF.lerArquivo();
-        ArrayList<String> clientesPJ = arqClientePJ.lerArquivo();
-        ArrayList<String> condutores = arqCondutor.lerArquivo();
-        ArrayList<String> frotas = arqFrota.lerArquivo();
+        // Lendo clientes PF
+        System.out.println("\nInstanciando clientes PF:");
+        for (String linha : arqClientePF.lerArquivo()) {
+            String[] array = linha.split(",");
+            ClientePF cli = new ClientePF(array[1], array[3], array[2], array[4],
+             array[0], LocalDate.parse(array[7]), array[6], array[5], null);
+            System.out.println(cli.toString());
+            cadastrarCliente(cli);
+            for (Veiculo v : veiculos) {
+                if (v.getPlaca().equals(array[8])) {
+                    cli.cadastrarVeiculo(v);
+                    gerarSeguro(cli, v);
+                    break;
+                }
+            }
+        }
+        // Lendo frotas
+        System.out.println("\nInstanciando frotas:");
+        ArrayList<Frota> frotas = new ArrayList<Frota>();
+        for (String linha : arqFrota.lerArquivo()) {
+            String[] array = linha.split(",");
+            Frota f = new Frota(array[0]);
+            System.out.println(f.toString());
+            int found = 0;
+            for (Veiculo v : veiculos) {
+                for (String s : array) {
+                    if (s.equals(v.getPlaca())) {
+                        f.addVeiculo(v);
+                        found++;
+                        break;
+                    }
+                }
+                if (found == 3) break;
+            }
+            frotas.add(f);
+        }
+        // Lendo Clientes PJ
+        System.out.println("\nInstanciando clientes PJ:");
+        for (String linha : arqClientePJ.lerArquivo()) {
+            String[] array  = linha.split(",");
+            ClientePJ cli = new ClientePJ(array[1], array[3], array[2], array[4], LocalDate.parse(array[5]),
+             array[0], 5);
+            System.out.println(cli.toString());
+            for (Frota f : frotas) {
+                if (f.getCode().equals(array[6])) {
+                    cli.addFrota(f);
+                    gerarSeguro(cli, f);
+                    break;
+                }
+            }
+        }
+        // Lendo condutores
+        System.out.println("\nInstanciando condutores:");
+        for (String linha : arqCondutor.lerArquivo()) {
+            String[] array = linha.split(",");
+            Condutor cond = new Condutor(array[0], array[1], array[2], array[3], array[4], LocalDate.parse(array[5]));
+            System.out.println(cond.toString());
+            cadastrarCondutor(cond);
+        }
     }
 }

@@ -121,4 +121,9 @@ public class ClientePJ extends Cliente {
             }
         }
     }
+
+    public void addFrota(Frota f) {
+        // adiciona a frota na lista do cliente, func auxiliar para cumprir as nescessidades do lab 6
+        this.listaFrota.add(f);
+    }
 }
